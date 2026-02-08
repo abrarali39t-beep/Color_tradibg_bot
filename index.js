@@ -145,22 +145,28 @@ bot.on("callback_query", (query) => {
     return bot.sendMessage(chatId, "🔢 Send last 3 digits of previous period (e.g. 555)");
   }
 
-  if (query.data === "MY_REF") {
-    const count = data.referrals[chatId] || 0;
-    const credits = data.sureShotCredits[chatId] || 0;
-    const link = `https://t.me/${BOT_USERNAME}?start=REF_${chatId}`;
+  if (q.data === "MY_REF") {
+  const count = data.referrals[chatId] || 0;
+  const credits = data.sureShotCredits[chatId] || 0;
+  const link = `https://t.me/${BOT_USERNAME}?start=REF_${chatId}`;
 
-    return bot.sendMessage(chatId,
-`👥 *Your Referral Dashboard*
+  return bot.sendMessage(chatId,
+`👥 Your Referral Dashboard
 
-🔗 Link:
+🔗 Your invite link:
 ${link}
 
 📊 Invites: ${count}/5  
 🎁 Sure-Shot Credits: ${credits}`,
-{ parse_mode: "Markdown" });
+{
+  disable_web_page_preview: true,
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "🔗 Open My Referral Link", url: link }]
+    ]
   }
-
+});
+}
   if (user.step === 3 && (query.data === "BIG" || query.data === "SMALL")) {
     user.size = query.data;
     user.step = 4;
