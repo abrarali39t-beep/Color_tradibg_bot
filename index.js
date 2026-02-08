@@ -90,20 +90,21 @@ bot.onText(/\/start(?:\s+(.+))?/, (msg, match) => {
 });
 
 // ================= SINGLE CALLBACK HANDLER =================
-bot.on("callback_query", async (q) => {
+bot.on("callback_query", (q) => {
   if (!q.message) return;
+
+  // ✅ ACK the click (prevents Telegram UI freeze)
+  bot.answerCallbackQuery(q.id, { text: "Loading..." }).catch(()=>{});
+
   const chatId = q.message.chat.id;
-  bot.answerCallbackQuery(q.id).catch(()=>{});
   USERS[chatId] = USERS[chatId] || { step: 0 };
   const user = USERS[chatId];
 
-  // Start prediction
   if (q.data === "START_PRED") {
     user.step = 1;
     return bot.sendMessage(chatId, "🔢 Send last 3 digits (e.g. 555)");
   }
 
-  // Referral record (EDIT message to avoid Telegram cache issues)
   if (q.data === "REF_RECORD") {
     const invites = data.referrals[chatId] || 0;
     const credits = data.sureShotCredits[chatId] || 0;
@@ -118,9 +119,7 @@ bot.on("callback_query", async (q) => {
 🔗 Invite link:
 ${myLink}`;
 
-    return bot.editMessageText(text, {
-      chat_id: chatId,
-      message_id: q.message.message_id,
+    return bot.sendMessage(chatId, text, {
       parse_mode: "Markdown",
       disable_web_page_preview: true,
       reply_markup: {
@@ -131,48 +130,25 @@ ${myLink}`;
           [{ text: "⬅️ Back to Menu", callback_data: "BACK_MENU" }]
         ]
       }
-    }).catch(() => bot.sendMessage(chatId, text, {
-      parse_mode: "Markdown",
-      disable_web_page_preview: true,
-      reply_markup: {
-        inline_keyboard: [
-          unlocked
-            ? [{ text: "💎 Sure-Shot (UNLOCKED)", callback_data: "SURE_SHOT" }]
-            : [{ text: "🔒 Sure-Shot (Invite 5 to Unlock)", callback_data: "LOCKED" }],
-          [{ text: "⬅️ Back to Menu", callback_data: "BACK_MENU" }]
-        ]
-      }
-    }));
+    });
   }
 
-  // Back to Menu (EDIT)
   if (q.data === "BACK_MENU") {
-    const text = `🔥 *AI COLOR TRADING BOT*
+    return bot.sendMessage(chatId,
+`🔥 *AI COLOR TRADING BOT*
 🔮 Prediction System
-🎁 Invite 5 = 1 Sure-Shot`;
-
-    return bot.editMessageText(text, {
-      chat_id: chatId,
-      message_id: q.message.message_id,
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "🔮 Start Prediction", callback_data: "START_PRED" }],
-          [{ text: "📊 My Referral Record", callback_data: "REF_RECORD" }]
-        ]
-      }
-    }).catch(() => bot.sendMessage(chatId, text, {
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "🔮 Start Prediction", callback_data: "START_PRED" }],
-          [{ text: "📊 My Referral Record", callback_data: "REF_RECORD" }]
-        ]
-      }
-    }));
+🎁 Invite 5 = 1 Sure-Shot`,
+{
+  parse_mode: "Markdown",
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "🔮 Start Prediction", callback_data: "START_PRED" }],
+      [{ text: "📊 My Referral Record", callback_data: "REF_RECORD" }]
+    ]
+  }
+});
   }
 
-  // Locked sure-shot
   if (q.data === "LOCKED") {
     return bot.answerCallbackQuery(q.id, {
       text: "❌ Sure-Shot locked! Invite 5 users to unlock.",
@@ -180,7 +156,6 @@ ${myLink}`;
     });
   }
 
-  // Sure-shot premium
   if (q.data === "SURE_SHOT") {
     if (!user.period) {
       user.step = 1;
@@ -219,7 +194,6 @@ ${myLink}`;
 { parse_mode: "Markdown" });
   }
 
-  // Big/Small
   if (user.step === 3 && (q.data === "BIG" || q.data === "SMALL")) {
     user.step = 4;
     return bot.sendMessage(chatId, "🎨 Select Color", {
@@ -230,7 +204,6 @@ ${myLink}`;
     });
   }
 
-  // Color -> normal prediction
   if (user.step === 4 && ["RED","GREEN","VIOLET"].includes(q.data)) {
     const next = parseInt(user.period, 10) + 1;
     const size = Math.random() > 0.5 ? "BIG 🔥" : "SMALL ❄️";
