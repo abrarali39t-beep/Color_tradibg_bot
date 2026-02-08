@@ -1,3 +1,8 @@
+// ================= ENV (Render + Local) =================
+try {
+  require("dotenv").config();
+} catch {}
+
 // ================= SAFE ERROR HANDLING =================
 process.on("uncaughtException", (err) => console.error("UNCAUGHT:", err));
 process.on("unhandledRejection", (err) => console.error("UNHANDLED:", err));
@@ -8,24 +13,30 @@ const fs = require("fs");
 const path = require("path");
 
 // ================= CONFIG =================
-const TOKEN = process.env.TOKEN;
+const TOKEN = process.env.TOKEN && process.env.TOKEN.trim();
 const ADMIN_ID = 6076530076;
 const BOT_USERNAME = "aicolortradingbot"; // without @
 
+// 🔎 ENV sanity log (comment out after stable)
+console.log("ENV TOKEN EXISTS:", !!TOKEN);
+console.log("ENV TOKEN LENGTH:", TOKEN ? TOKEN.length : 0);
+
 if (!TOKEN) {
-  console.log("❌ ERROR: TOKEN not set in ENV");
+  console.error("❌ ERROR: TOKEN missing. Set TOKEN in Render Environment.");
   process.exit(1);
 }
 
-console.log("🤖 BOT STARTED:", BOT_USERNAME);
+console.log("🤖 BOT STARTING:", BOT_USERNAME);
 
-// ================= BOT =================
+// ================= BOT (Polling) =================
 const bot = new TelegramBot(TOKEN, { polling: true });
 
 // ================= SERVER (Render Health) =================
 const app = express();
 app.get("/", (req, res) => res.send("🤖 AI COLOR TRADING BOT LIVE"));
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("🌐 Web server running");
+});
 
 // ================= DATA FILE =================
 const DATA_FILE = path.join(__dirname, "users.json");
@@ -42,7 +53,7 @@ if (fs.existsSync(DATA_FILE)) {
   try {
     data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
   } catch {
-    console.log("⚠️ users.json corrupted, reset");
+    console.log("⚠️ users.json corrupted, resetting.");
   }
 }
 const saveData = () => fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
@@ -90,7 +101,6 @@ bot.onText(/\/start(?:\s+(.+))?/, (msg, match) => {
 
         bot.sendMessage(inviterId,
 `🎉 Referral Reward!
-
 5 users invited ✅  
 1 Sure-Shot Credit added 💎`).catch(() => {});
       }
@@ -124,12 +134,15 @@ bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
   trackUser(chatId);
 
+  // Always answer callback to avoid frozen buttons
+  bot.answerCallbackQuery(query.id).catch(() => {});
+
   USERS[chatId] = USERS[chatId] || { step: 0 };
   const user = USERS[chatId];
 
   if (query.data === "START_PRED") {
     user.step = 1;
-    return bot.sendMessage(chatId, "🔢 Send last *3 digits* of previous period\nExample: `555`", { parse_mode: "Markdown" });
+    return bot.sendMessage(chatId, "🔢 Send last 3 digits of previous period (e.g. 555)");
   }
 
   if (query.data === "MY_REF") {
@@ -165,13 +178,13 @@ ${link}
   if (user.step === 4 && ["RED", "GREEN", "VIOLET"].includes(query.data)) {
     if (!user.period) {
       USERS[chatId] = { step: 0 };
-      return bot.sendMessage(chatId, "❌ Session expired. Please start again.");
+      return bot.sendMessage(chatId, "❌ Session expired. Please /start again.");
     }
 
     bot.sendMessage(chatId, "🧠 AI Engine Processing...");
 
     setTimeout(() => {
-      const next = parseInt(user.period) + 1;
+      const next = parseInt(user.period, 10) + 1;
       const size = Math.random() > 0.5 ? "BIG 🔥" : "SMALL ❄️";
       const colors = ["RED 🔴", "GREEN 🟢", "VIOLET 🟣"];
       const color = colors[Math.floor(Math.random() * colors.length)];
@@ -189,10 +202,8 @@ ${link}
 { parse_mode: "Markdown" });
 
       USERS[chatId] = { step: 0 };
-    }, 1000);
+    }, 900);
   }
-
-  bot.answerCallbackQuery(query.id).catch(() => {});
 });
 
 // ================= USER MESSAGES =================
@@ -215,7 +226,7 @@ bot.on("message", (msg) => {
   if (user.step === 2) {
     if (!/^[0-9]$/.test(msg.text))
       return bot.sendMessage(chatId, "❌ Enter single digit (0–9)");
-    user.number = msg.text; // store number
+    user.number = msg.text; // stored for future logic
     user.step = 3;
     return bot.sendMessage(chatId, "⚖️ Choose Big or Small", {
       reply_markup: {

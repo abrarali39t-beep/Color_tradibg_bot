@@ -1,15 +1,17 @@
 {
   "name": "ai-colortrading-bot",
   "version": "1.0.0",
+  "description": "AI Color Trading Telegram Bot with referral & prediction system",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "engines": {
-    "node": "18.x"
+    "node": ">=20.x"
   },
   "dependencies": {
-    "node-telegram-bot-api": "^0.63.0",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "dotenv": "^16.4.5"
   }
 }
