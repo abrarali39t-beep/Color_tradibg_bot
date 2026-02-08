@@ -83,7 +83,7 @@ function trackUser(chatId) {
 
 // ================= USER STATE =================
 let USERS = {};
-
+let ADMIN_BROADCAST = false;
 // ================= /start + referral =================
 bot.onText(/\/start(?:\s+(.+))?/, (msg, match) => {
   const chatId = msg.chat.id;
@@ -247,4 +247,52 @@ bot.onText(/\/stats/, (msg) => {
 👥 Total Users: ${data.allUsers.length}  
 📅 Today: ${data.dailyUsers[today()]?.length || 0}  
 🗓 This Month: ${data.monthlyUsers[month()]?.length || 0}`);
+});
+// ================= ADMIN BROADCAST =================
+bot.on("message", async (msg) => {
+  const chatId = msg.chat.id;
+
+  // Start broadcast mode
+  if (msg.text === "/send" && chatId === ADMIN_ID) {
+    ADMIN_BROADCAST = true;
+    return bot.sendMessage(chatId, "📤 Broadcast ON\nSend any text/photo/video/voice\n/cancel to stop");
+  }
+
+  // Stop broadcast mode
+  if (msg.text === "/cancel" && chatId === ADMIN_ID) {
+    ADMIN_BROADCAST = false;
+    return bot.sendMessage(chatId, "❌ Broadcast OFF");
+  }
+
+  // Send to all users
+  if (ADMIN_BROADCAST && chatId === ADMIN_ID) {
+    for (const userId of data.allUsers) {
+      if (userId === ADMIN_ID) continue;
+
+      try {
+        if (msg.text && !msg.text.startsWith("/")) {
+          await bot.sendMessage(userId, msg.text).catch(()=>{});
+        } else if (msg.photo) {
+          const fileId = msg.photo[msg.photo.length - 1].file_id;
+          await bot.sendPhoto(userId, fileId, { caption: msg.caption || "" }).catch(()=>{});
+        } else if (msg.video) {
+          await bot.sendVideo(userId, msg.video.file_id, { caption: msg.caption || "" }).catch(()=>{});
+        } else if (msg.voice) {
+          await bot.sendVoice(userId, msg.voice.file_id, { caption: msg.caption || "" }).catch(()=>{});
+        }
+      } catch {}
+    }
+    return bot.sendMessage(chatId, "✅ Broadcast sent to all users.");
+  }
+});
+bot.onText(/\/stats/, (msg) => {
+  if (msg.chat.id !== ADMIN_ID) return;
+
+  bot.sendMessage(msg.chat.id,
+`📊 BOT STATS
+
+👥 Total Users: ${data.allUsers.length}
+📅 Today Active: ${data.dailyUsers[today()]?.length || 0}
+🗓 This Month: ${data.monthlyUsers[month()]?.length || 0}
+`);
 });
