@@ -11,7 +11,7 @@ const path = require("path");
 
 // ================= CONFIG =================
 const TOKEN = (process.env.TOKEN || "").trim();
-const ADMIN_ID = 6076530076;            // apna admin id
+const ADMIN_ID = 6076530076;              // your admin id
 const BOT_USERNAME = "aicolortradingbot"; // without @
 
 if (!TOKEN) { console.error("TOKEN missing"); process.exit(1); }
@@ -51,9 +51,11 @@ function trackUser(chatId){
 let USERS = {};
 let ADMIN_BROADCAST = false;
 
-// ================= /start + referral =================
+// ================= /start + referral (with dashboard UX) =================
 bot.onText(/\/start(?:\s+(.+))?/, (msg, match) => {
   const chatId = msg.chat.id;
+  const isReturning = data.allUsers.includes(chatId);
+
   trackUser(chatId);
 
   const ref = match?.[1];
@@ -63,13 +65,40 @@ bot.onText(/\/start(?:\s+(.+))?/, (msg, match) => {
       data.referrals[inviterId] = (data.referrals[inviterId] || 0) + 1;
       if (data.referrals[inviterId] % 5 === 0) {
         data.sureShotCredits[inviterId] = (data.sureShotCredits[inviterId] || 0) + 1;
-        bot.sendMessage(inviterId, "🎉 Referral Reward! 5 invites = 1 Sure-Shot 💎").catch(()=>{});
+        bot.sendMessage(inviterId, "🎉 Referral Reward!\n5 users invited = 1 Sure-Shot 💎").catch(()=>{});
       }
       saveData();
     }
   }
 
   USERS[chatId] = { step: 0 };
+
+  const myLink = `https://t.me/${BOT_USERNAME}?start=REF_${chatId}`;
+  const invites = data.referrals[chatId] || 0;
+  const credits = data.sureShotCredits[chatId] || 0;
+
+  if (isReturning) {
+    return bot.sendMessage(chatId,
+`📊 *Your Referral Dashboard*
+
+🔗 Your Invite Link:
+${myLink}
+
+👥 Invites: ${invites}/5  
+💎 Sure-Shot Credits: ${credits}
+
+Share your link to earn rewards 👇`,
+{
+  parse_mode: "Markdown",
+  disable_web_page_preview: true,
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "🔮 Start Prediction", callback_data: "START_PRED" }],
+      [{ text: "🔗 Open My Referral Link", url: myLink }]
+    ]
+  }
+});
+  }
 
   bot.sendMessage(chatId,
 `🔥 *AI COLOR TRADING BOT*
@@ -82,7 +111,7 @@ Choose an option 👇`,
   reply_markup: {
     inline_keyboard: [
       [{ text: "🔮 Start Prediction", callback_data: "START_PRED" }],
-      [{ text: "🔗 My Referral Link", url: `https://t.me/${BOT_USERNAME}?start=REF_${chatId}` }]
+      [{ text: "🔗 My Referral Link", url: myLink }]
     ]
   }
 });
