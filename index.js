@@ -181,3 +181,81 @@ bot.onText(/\/leaderboard/, (msg) => {
 
 // ================= BUTTON HANDLER (WIN/LOSS + START_FREE + BUY_VIP)
 // (Use your previous WIN/LOSS logic here – unchanged)
+bot.on("callback_query", (q) => {
+  const chatId = q.message.chat.id;
+  initUser(chatId);
+  const user = data.users[chatId];
+
+  // ▶️ START FREE
+  if (q.data === "START_FREE") {
+    user.basePeriod = null;
+    user.currentPeriod = null;
+    user.level = 1;
+    user.bet = 1;
+    user.history = [];
+    saveData();
+
+    bot.answerCallbackQuery(q.id);
+    return bot.sendMessage(chatId, "🔢 Last 3 digits of previous period bhejo (e.g. 555)");
+  }
+
+  // 👑 BUY VIP
+  if (q.data === "BUY_VIP") {
+    bot.answerCallbackQuery(q.id);
+    return bot.sendMessage(chatId,
+`👑 *VIP ACCESS*
+
+💎 Price: ₹99 / 1 Month  
+👤 Admin: @willian2500  
+💳 UPI: willianxpeed@pingpay  
+
+Payment screenshot admin ko bhejo.`,
+      { parse_mode: "Markdown" }
+    );
+  }
+
+  // ✅ WIN / ❌ LOSS
+  if (q.data === "WIN" || q.data === "LOSS") {
+    if (!user.prediction) {
+      bot.answerCallbackQuery(q.id, { text: "No active prediction", show_alert: false });
+      return;
+    }
+
+    const maxLevel = getMaxLevel(chatId);
+
+    user.history.push({
+      period: user.currentPeriod,
+      bet: user.bet,
+      prediction: user.prediction,
+      result: q.data
+    });
+    if (user.history.length > 10) user.history.shift();
+
+    let msg = "";
+
+    if (q.data === "WIN") {
+      user.level = 1;
+      user.bet = 1;
+      msg = `✅ *WIN*\nLevel reset → 1\nBet reset → ₹1`;
+    } else {
+      user.level += 1;
+      user.bet *= 2;
+
+      if (user.level > maxLevel) {
+        msg = `🚫 *MAX LEVEL REACHED*\nSystem reset`;
+        user.level = 1;
+        user.bet = 1;
+      } else {
+        msg = `❌ *LOSS*\nNext Level: ${user.level}\nNext Bet: ₹${user.bet}`;
+      }
+    }
+
+    user.prediction = null;
+    saveData();
+
+    bot.answerCallbackQuery(q.id);
+    bot.sendMessage(chatId, msg, { parse_mode: "Markdown" });
+
+    setTimeout(() => sendPrediction(chatId), 2000);
+  }
+});
