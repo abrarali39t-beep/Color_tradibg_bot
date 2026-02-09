@@ -71,19 +71,24 @@ bot.onText(/\/start/, (msg) => {
   const userId = msg.from.id;
   ensureUser(userId);
 
-  bot.sendMessage(chatId,
+  db.get(`SELECT vip FROM users WHERE id=?`, [userId], (err, row) => {
+    const isVip = row && row.vip === 1;
+
+    const buttons = [
+      [{ text: '🆓 Start Free', callback_data: 'start_free' }],
+      isVip ? [{ text: '💎 Start VIP', callback_data: 'start_vip' }] : [{ text: '💎 Buy VIP', callback_data: 'buy_vip' }],
+      [{ text: '🧑‍💻 Admin Support', url: `https://t.me/willian2500` }]
+    ];
+
+    bot.sendMessage(chatId,
 `🎯 *Welcome to Color Trading Bot*
 
 Choose Mode:`,
-  {
-    parse_mode: 'Markdown',
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: '🆓 Start Free', callback_data: 'start_free' }],
-        [{ text: '💎 Buy VIP', callback_data: 'buy_vip' }],
-        [{ text: '🧑‍💻 Admin Support', url: `https://t.me/${ADMIN_USERNAME}` }]
-      ]
-    }
+      {
+        parse_mode: 'Markdown',
+        reply_markup: { inline_keyboard: buttons }
+      }
+    );
   });
 });
 
@@ -112,7 +117,16 @@ After payment, contact admin:
     handleResult(q, q.data === 'result_win' ? 'win' : 'loss');
   }
 });
-
+if (q.data === 'start_vip') {
+  db.get(`SELECT vip FROM users WHERE id=?`, [userId], (err, row) => {
+    if (!row || row.vip !== 1) {
+      bot.sendMessage(chatId, '❌ VIP access nahi hai. Buy VIP first.');
+      return;
+    }
+    resetUser(userId, 'vip');
+    bot.sendMessage(chatId, `💎 *VIP Mode Started!*\nSend last 3 digit period number (e.g. 555)`, { parse_mode: 'Markdown' });
+  });
+}
 // ===== PERIOD INPUT =====
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
