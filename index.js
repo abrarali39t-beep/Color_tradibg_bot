@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const TOKEN = process.env.TOKEN;
 const ADMIN_ID = 6076530076;
-const BOT_USERNAME = "aicolortradingbot"; // <-- change this
+const BOT_USERNAME = "aicolortradingbot"; // without @
 
 const bot = new TelegramBot(TOKEN, { polling: true });
 
@@ -18,23 +18,23 @@ const DATA_FILE = "users.json";
 let data = {
   users: {},
   vip: [ADMIN_ID],
-  referralVIP: {} // { userId: expiry }
+  referralVIP: {} // { userId: expiryTimestamp }
 };
 
-if (fs.existsSync(DATA_FILE)) data = JSON.parse(fs.readFileSync(DATA_FILE));
+if (fs.existsSync(DATA_FILE)) {
+  data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+}
 function saveData() {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
-// ================= VIP CHECK
+// ================= HELPERS
 function isVIP(id) {
   if (data.vip.includes(id)) return true;
   const exp = data.referralVIP[id];
-  if (exp && Date.now() < exp) return true;
-  return false;
+  return exp && Date.now() < exp;
 }
 
-// ================= INIT USER
 function initUser(id) {
   if (!data.users[id]) {
     data.users[id] = {
@@ -51,10 +51,89 @@ function initUser(id) {
   }
 }
 
-// ================= MAX LEVEL
 function getMaxLevel(chatId) {
-  return isVIP(chatId) ? 5 : 7;
+  return isVIP(chatId) ? 5 : 7; // VIP 5 | FREE 7
 }
+
+// ================= START + REFERRAL
+bot.onText(/\/start(?:\s+ref_(\d+))?/, (msg, match) => {
+  const chatId = msg.chat.id;
+  initUser(chatId);
+
+  const refBy = match && match[1];
+  if (refBy && refBy !== String(chatId) && !data.users[chatId].referredBy) {
+    initUser(refBy);
+    data.users[chatId].referredBy = refBy;
+    data.users[refBy].referrals += 1;
+
+    // reward on every 3 refs
+    if (data.users[refBy].referrals % 3 === 0) {
+      const vipDays = 7;
+      data.referralVIP[refBy] = Date.now() + vipDays * 24 * 60 * 60 * 1000;
+      bot.sendMessage(refBy, `🎉 You unlocked *${vipDays} days VIP* via referrals!`, { parse_mode: "Markdown" });
+      bot.sendMessage(ADMIN_ID, `🔥 Referral VIP unlocked by user ${refBy}`);
+    }
+    saveData();
+  }
+
+  bot.sendMessage(chatId,
+`👋 *Welcome to AI Color Prediction Bot*
+
+🆓 Free: 7 Levels  
+👑 VIP: 5 Levels  
+
+Choose an option 👇`,
+    {
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "▶️ Start Free", callback_data: "START_FREE" }],
+          [{ text: "👑 Buy VIP", callback_data: "BUY_VIP" }]
+        ]
+      }
+    }
+  );
+});
+
+// ================= REF DASHBOARD
+bot.onText(/\/ref/, (msg) => {
+  const chatId = msg.chat.id;
+  initUser(chatId);
+  const u = data.users[chatId];
+
+  const refLink = `https://t.me/${BOT_USERNAME}?start=ref_${chatId}`;
+  const vipStatus = isVIP(chatId) ? "👑 VIP Active" : "🆓 Free User";
+
+  bot.sendMessage(chatId,
+`📊 *Referral Dashboard*
+
+👥 Referrals: ${u.referrals}
+🎁 Reward: 3 refs = 7 days VIP
+
+🔗 Your link:
+${refLink}
+
+Status: ${vipStatus}`,
+    { parse_mode: "Markdown" }
+  );
+});
+
+// ================= LEADERBOARD
+bot.onText(/\/leaderboard/, (msg) => {
+  const list = Object.entries(data.users)
+    .map(([id, u]) => ({ id, refs: u.referrals || 0 }))
+    .sort((a, b) => b.refs - a.refs)
+    .slice(0, 10);
+
+  if (!list.length) return bot.sendMessage(msg.chat.id, "No referrals yet.");
+
+  let text = "🏆 *Top Referrers*\n\n";
+  list.forEach((u, i) => {
+    text += `${i + 1}. User ${u.id} — 👥 ${u.refs} refs\n`;
+  });
+
+  bot.sendMessage(msg.chat.id, text, { parse_mode: "Markdown" });
+});
 
 // ================= SEND PREDICTION
 function sendPrediction(chatId) {
@@ -81,7 +160,7 @@ function sendPrediction(chatId) {
 📊 Mode: ${isVIP(chatId) ? "👑 VIP" : "🆓 FREE"}
 🔮 Prediction: *${prediction}*
 
-Result batayein 👇`,
+Result batao 👇`,
     {
       parse_mode: "Markdown",
       reply_markup: {
@@ -93,113 +172,24 @@ Result batayein 👇`,
   );
 }
 
-// ================= /start with referral
-bot.onText(/\/start(?:\s+ref_(\d+))?/, (msg, match) => {
-  const chatId = msg.chat.id;
-  initUser(chatId);
-
-  const refBy = match && match[1];
-  if (refBy && refBy !== String(chatId) && !data.users[chatId].referredBy) {
-    initUser(refBy);
-    data.users[chatId].referredBy = refBy;
-    data.users[refBy].referrals += 1;
-
-    if (data.users[refBy].referrals % 3 === 0) {
-      const vipDays = 7;
-      const exp = Date.now() + vipDays * 24 * 60 * 60 * 1000;
-      data.referralVIP[refBy] = exp;
-
-      bot.sendMessage(refBy, `🎉 Congrats! You unlocked *${vipDays} days VIP* via referrals!`);
-      bot.sendMessage(ADMIN_ID, `🔥 Referral VIP unlocked by user ${refBy}`);
-    }
-    saveData();
-  }
-
-  bot.sendMessage(chatId,
-`👋 *Welcome to Dark AI Predictor Bot*
-
-🆓 Free: 7 Levels  
-👑 VIP: 5 Levels  
-
-Commands:
-🔗 /ref – Referral dashboard  
-🏆 /leaderboard – Top referrers`,
-    {
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "▶️ Start Free", callback_data: "START_FREE" }],
-          [{ text: "👑 Buy VIP", callback_data: "BUY_VIP" }]
-        ]
-      }
-    }
-  );
-});
-
-// ================= /ref (Dashboard)
-bot.onText(/\/ref/, (msg) => {
-  const chatId = msg.chat.id;
-  initUser(chatId);
-
-  const u = data.users[chatId];
-  const refLink = `https://t.me/${BOT_USERNAME}?start=ref_${chatId}`;
-  const vipStatus = isVIP(chatId)
-    ? "👑 VIP Active"
-    : "🆓 Free User";
-
-  bot.sendMessage(chatId,
-`📊 *Referral Dashboard*
-
-👥 Total Referrals: ${u.referrals}
-🎁 Reward: 3 referrals = 7 days VIP
-🔗 Your Link:
-${refLink}
-
-Status: ${vipStatus}`,
-    { parse_mode: "Markdown" }
-  );
-});
-
-// ================= /leaderboard
-bot.onText(/\/leaderboard/, (msg) => {
-  const arr = Object.entries(data.users)
-    .map(([id, u]) => ({ id, refs: u.referrals || 0 }))
-    .sort((a, b) => b.refs - a.refs)
-    .slice(0, 10);
-
-  if (arr.length === 0) {
-    return bot.sendMessage(msg.chat.id, "No referrals yet.");
-  }
-
-  let text = "🏆 *Top Referrers*\n\n";
-  arr.forEach((u, i) => {
-    text += `${i + 1}. User ${u.id} — 👥 ${u.refs} referrals\n`;
-  });
-
-  bot.sendMessage(msg.chat.id, text, { parse_mode: "Markdown" });
-});
-
-// ================= BUTTON HANDLER (WIN/LOSS + START_FREE + BUY_VIP)
-// (Use your previous WIN/LOSS logic here – unchanged)
+// ================= CALLBACK HANDLER
 bot.on("callback_query", (q) => {
   const chatId = q.message.chat.id;
   initUser(chatId);
   const user = data.users[chatId];
 
-  // ▶️ START FREE
   if (q.data === "START_FREE") {
     user.basePeriod = null;
     user.currentPeriod = null;
     user.level = 1;
     user.bet = 1;
     user.history = [];
+    user.prediction = null;
     saveData();
-
     bot.answerCallbackQuery(q.id);
     return bot.sendMessage(chatId, "🔢 Last 3 digits of previous period bhejo (e.g. 555)");
   }
 
-  // 👑 BUY VIP
   if (q.data === "BUY_VIP") {
     bot.answerCallbackQuery(q.id);
     return bot.sendMessage(chatId,
@@ -214,7 +204,6 @@ Payment screenshot admin ko bhejo.`,
     );
   }
 
-  // ✅ WIN / ❌ LOSS
   if (q.data === "WIN" || q.data === "LOSS") {
     if (!user.prediction) {
       bot.answerCallbackQuery(q.id, { text: "No active prediction", show_alert: false });
@@ -223,30 +212,15 @@ Payment screenshot admin ko bhejo.`,
 
     const maxLevel = getMaxLevel(chatId);
 
-    user.history.push({
-      period: user.currentPeriod,
-      bet: user.bet,
-      prediction: user.prediction,
-      result: q.data
-    });
-    if (user.history.length > 10) user.history.shift();
-
-    let msg = "";
-
     if (q.data === "WIN") {
       user.level = 1;
       user.bet = 1;
-      msg = `✅ *WIN*\nLevel reset → 1\nBet reset → ₹1`;
     } else {
       user.level += 1;
       user.bet *= 2;
-
       if (user.level > maxLevel) {
-        msg = `🚫 *MAX LEVEL REACHED*\nSystem reset`;
         user.level = 1;
         user.bet = 1;
-      } else {
-        msg = `❌ *LOSS*\nNext Level: ${user.level}\nNext Bet: ₹${user.bet}`;
       }
     }
 
@@ -254,8 +228,33 @@ Payment screenshot admin ko bhejo.`,
     saveData();
 
     bot.answerCallbackQuery(q.id);
-    bot.sendMessage(chatId, msg, { parse_mode: "Markdown" });
+    return setTimeout(() => sendPrediction(chatId), 1500);
+  }
+});
 
-    setTimeout(() => sendPrediction(chatId), 2000);
+// ================= PERIOD INPUT HANDLER
+bot.on("message", (msg) => {
+  const chatId = msg.chat.id;
+  const text = msg.text;
+  if (!text || text.startsWith("/")) return;
+
+  initUser(chatId);
+  const user = data.users[chatId];
+
+  if (user.basePeriod === null) {
+    if (!/^\d{3}$/.test(text)) {
+      return bot.sendMessage(chatId, "❌ Enter exactly 3 digits (e.g. 555)");
+    }
+
+    user.basePeriod = parseInt(text);
+    user.currentPeriod = user.basePeriod;
+    user.level = 1;
+    user.bet = 1;
+    user.prediction = null;
+    saveData();
+
+    return sendPrediction(chatId);
+  } else {
+    return bot.sendMessage(chatId, "ℹ️ Game already started. Use WIN / LOSS buttons.");
   }
 });
