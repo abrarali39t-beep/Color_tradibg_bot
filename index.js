@@ -102,6 +102,17 @@ bot.on('callback_query', (q) => {
     bot.sendMessage(chatId, `🆓 *Free Mode Started!*\nSend last 3 digit period number (e.g. 555)`, { parse_mode: 'Markdown' });
   }
 
+  if (q.data === 'start_vip') {
+    db.get(`SELECT vip FROM users WHERE id=?`, [userId], (err, row) => {
+      if (!row || row.vip !== 1) {
+        bot.sendMessage(chatId, '❌ VIP access nahi hai. Buy VIP first.');
+        return;
+      }
+      resetUser(userId, 'vip');
+      bot.sendMessage(chatId, `💎 *VIP Mode Started!*\nSend last 3 digit period number (e.g. 555)`, { parse_mode: 'Markdown' });
+    });
+  }
+
   if (q.data === 'buy_vip') {
     bot.sendMessage(chatId,
 `💎 *Buy VIP*
@@ -117,16 +128,6 @@ After payment, contact admin:
     handleResult(q, q.data === 'result_win' ? 'win' : 'loss');
   }
 });
-if (q.data === 'start_vip') {
-  db.get(`SELECT vip FROM users WHERE id=?`, [userId], (err, row) => {
-    if (!row || row.vip !== 1) {
-      bot.sendMessage(chatId, '❌ VIP access nahi hai. Buy VIP first.');
-      return;
-    }
-    resetUser(userId, 'vip');
-    bot.sendMessage(chatId, `💎 *VIP Mode Started!*\nSend last 3 digit period number (e.g. 555)`, { parse_mode: 'Markdown' });
-  });
-}
 // ===== PERIOD INPUT =====
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
