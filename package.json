@@ -1,7 +1,7 @@
 {
   "name": "color-trading-telegram-bot",
   "version": "1.0.0",
-  "description": "Telegram color trading bot with free & VIP modes",
+  "description": "Telegram color trading prediction bot with Free & VIP modes",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.66.0",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "dotenv": "^16.4.5"
   }
 }
