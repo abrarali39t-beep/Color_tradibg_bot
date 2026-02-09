@@ -12,7 +12,7 @@ if (!TOKEN) {
 const ADMIN_USERNAME = 'willian2500'; // without @
 const VIP_UPI = 'willianxpeed@pingpay';
 const VIP_PRICE = '₹99 / Month';
-
+const ADMIN_ID = 6076530076; // <-- apni Telegram numeric ID yahan daalo
 const bot = new TelegramBot(TOKEN, { polling: true });
 const db = new sqlite3.Database('./bot.db');
 
@@ -209,13 +209,89 @@ Send next period number 👇`,
 // ===== ADMIN: ADD VIP =====
 bot.onText(/\/addvip (\d+)/, (msg, match) => {
   const chatId = msg.chat.id;
-  if (msg.from.username !== ADMIN_USERNAME) {
+
+  if (msg.from.id !== ADMIN_ID) {
     bot.sendMessage(chatId, `❌ You are not admin`);
     return;
   }
+
   const targetId = match[1];
   db.run(`UPDATE users SET vip=1, mode='vip', updated_at=strftime('%s','now') WHERE id=?`, [targetId]);
   bot.sendMessage(chatId, `✅ User ${targetId} is now VIP`);
 });
+let adminBroadcastMode = false;
 
+bot.onText(/\/broadcast/, (msg) => {
+  if (msg.from.id !== ADMIN_ID) return bot.sendMessage(msg.chat.id, '❌ You are not admin');
+
+  adminBroadcastMode = true;
+  bot.sendMessage(msg.chat.id, '📣 Broadcast mode ON.\nAb jo bhi bhejoge (text/photo/video/voice/link/file), sab users ko chala jayega.\nCancel: /cancelbroadcast');
+});
+
+bot.onText(/\/cancelbroadcast/, (msg) => {
+  if (msg.from.id !== ADMIN_ID) return;
+  adminBroadcastMode = false;
+  bot.sendMessage(msg.chat.id, '❌ Broadcast mode OFF.');
+});
+
+// Catch-all: Admin ka jo bhi message aaye broadcast ho
+bot.on('message', (msg) => {
+  if (!adminBroadcastMode) return;
+  if (msg.from.id !== ADMIN_ID) return;
+
+  db.all(`SELECT id FROM users`, [], (err, rows) => {
+    if (err) return console.error(err);
+
+    rows.forEach(u => {
+      forwardAny(msg, u.id);
+    });
+  });
+});
+let adminSendToUser = null;
+
+bot.onText(/\/send (\d+)/, (msg, match) => {
+  if (msg.from.id !== ADMIN_ID) return bot.sendMessage(msg.chat.id, '❌ You are not admin');
+
+  adminSendToUser = match[1];
+  bot.sendMessage(msg.chat.id, `🎯 Send mode ON for user ${adminSendToUser}.\nAb jo bhi bhejoge us user ko chala jayega.\nCancel: /cancelsend`);
+});
+
+bot.onText(/\/cancelsend/, (msg) => {
+  if (msg.from.id !== ADMIN_ID) return;
+  adminSendToUser = null;
+  bot.sendMessage(msg.chat.id, '❌ Send mode OFF.');
+});
+
+// Catch-all: Admin ka jo bhi message aaye selected user ko forward ho
+bot.on('message', (msg) => {
+  if (!adminSendToUser) return;
+  if (msg.from.id !== ADMIN_ID) return;
+
+  forwardAny(msg, adminSendToUser);
+});
+function forwardAny(msg, targetChatId) {
+  try {
+    if (msg.text) {
+      bot.sendMessage(targetChatId, msg.text, { disable_web_page_preview: false });
+    } else if (msg.photo) {
+      const fileId = msg.photo[msg.photo.length - 1].file_id;
+      bot.sendPhoto(targetChatId, fileId, { caption: msg.caption || '' });
+    } else if (msg.video) {
+      bot.sendVideo(targetChatId, msg.video.file_id, { caption: msg.caption || '' });
+    } else if (msg.voice) {
+      bot.sendVoice(targetChatId, msg.voice.file_id);
+    } else if (msg.audio) {
+      bot.sendAudio(targetChatId, msg.audio.file_id);
+    } else if (msg.document) {
+      bot.sendDocument(targetChatId, msg.document.file_id, { caption: msg.caption || '' });
+    } else if (msg.sticker) {
+      bot.sendSticker(targetChatId, msg.sticker.file_id);
+    } else {
+      // fallback: forward original message
+      bot.forwardMessage(targetChatId, msg.chat.id, msg.message_id);
+    }
+  } catch (e) {
+    console.error('Forward failed to', targetChatId, e.message);
+  }
+}
 console.log('🤖 Bot is running...');
