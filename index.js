@@ -294,4 +294,14 @@ function forwardAny(msg, targetChatId) {
     console.error('Forward failed to', targetChatId, e.message);
   }
 }
+// ===== DUMMY WEB SERVER (Render Web Service ke liye) =====
+const http = require('http');
+const PORT = process.env.PORT || 3000;
+
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Bot is running');
+}).listen(PORT, () => {
+  console.log(`🌐 Web server listening on port ${PORT}`);
+});
 console.log('🤖 Bot is running...');
