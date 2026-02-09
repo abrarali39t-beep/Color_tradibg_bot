@@ -1,7 +1,14 @@
+// index.js
+require('dotenv').config?.(); // optional if dotenv present (Render env vars kaam karte hain)
 const TelegramBot = require('node-telegram-bot-api');
 const sqlite3 = require('sqlite3').verbose();
 
-const TOKEN = '8532834468:AAHn-bszPGuGzXP-zhbEQ0rB0IzBuAX3YZ8';
+// ===== CONFIG =====
+const TOKEN = process.env.BOT_TOKEN; // Render Env Var: BOT_TOKEN
+if (!TOKEN) {
+  console.error('❌ BOT_TOKEN missing in environment variables');
+  process.exit(1);
+}
 const ADMIN_USERNAME = 'willian2500'; // without @
 const VIP_UPI = 'willianxpeed@pingpay';
 const VIP_PRICE = '₹99 / Month';
@@ -9,7 +16,7 @@ const VIP_PRICE = '₹99 / Month';
 const bot = new TelegramBot(TOKEN, { polling: true });
 const db = new sqlite3.Database('./bot.db');
 
-// DB
+// ===== DB INIT =====
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
@@ -18,18 +25,18 @@ db.serialize(() => {
     bet INTEGER DEFAULT 1,
     period INTEGER DEFAULT 0,
     mode TEXT DEFAULT 'free',
-    history TEXT DEFAULT '[]'
+    history TEXT DEFAULT '[]',
+    updated_at INTEGER DEFAULT (strftime('%s','now'))
   )`);
 });
 
-// Utils
-function nextPeriod(p) {
-  return parseInt(p) + 1;
-}
+// ===== HELPERS =====
+const nextPeriod = (p) => parseInt(p, 10) + 1;
 
+// Smart trend-based prediction (heuristic)
 function smartPredict(history) {
-  // history = ['BIG','SMALL','BIG'] (last 3)
-  if (history.length < 2) {
+  // history like ['BIG','SMALL','BIG'] (we store BIG/SMALL)
+  if (!history || history.length < 2) {
     return Math.random() > 0.5 ? 'BIG' : 'SMALL';
   }
   const last3 = history.slice(-3);
@@ -43,43 +50,51 @@ function smartPredict(history) {
 
 function resetUser(userId, mode) {
   db.run(
-    `INSERT OR REPLACE INTO users (id, vip, level, bet, period, mode, history)
-     VALUES (?, (SELECT vip FROM users WHERE id=?), 1, 1, 0, ?, '[]')`,
+    `INSERT OR REPLACE INTO users (id, vip, level, bet, period, mode, history, updated_at)
+     VALUES (?, COALESCE((SELECT vip FROM users WHERE id=?),0), 1, 1, 0, ?, '[]', strftime('%s','now'))`,
     [userId, userId, mode]
   );
 }
 
-// /start
+function ensureUser(userId) {
+  db.run(`INSERT OR IGNORE INTO users (id) VALUES (?)`, [userId]);
+}
+
+function capHistory(arr, n = 10) {
+  if (arr.length > n) return arr.slice(-n);
+  return arr;
+}
+
+// ===== START =====
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const userId = msg.from.id;
-
-  db.run(`INSERT OR IGNORE INTO users (id) VALUES (?)`, [userId]);
+  ensureUser(userId);
 
   bot.sendMessage(chatId,
 `🎯 *Welcome to Color Trading Bot*
 
 Choose Mode:`,
-    {
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "🆓 Start Free", callback_data: "start_free" }],
-          [{ text: "💎 Buy VIP", callback_data: "buy_vip" }],
-          [{ text: "🧑‍💻 Admin Support", url: `https://t.me/${ADMIN_USERNAME}` }]
-        ]
-      }
-    });
+  {
+    parse_mode: 'Markdown',
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: '🆓 Start Free', callback_data: 'start_free' }],
+        [{ text: '💎 Buy VIP', callback_data: 'buy_vip' }],
+        [{ text: '🧑‍💻 Admin Support', url: `https://t.me/${ADMIN_USERNAME}` }]
+      ]
+    }
+  });
 });
 
-// Buttons
+// ===== BUTTONS =====
 bot.on('callback_query', (q) => {
   const chatId = q.message.chat.id;
   const userId = q.from.id;
 
   if (q.data === 'start_free') {
     resetUser(userId, 'free');
-    bot.sendMessage(chatId, `🆓 Free Mode Started!\nSend last 3 digit period number (e.g. 555)`);
+    bot.sendMessage(chatId, `🆓 *Free Mode Started!*\nSend last 3 digit period number (e.g. 555)`, { parse_mode: 'Markdown' });
   }
 
   if (q.data === 'buy_vip') {
@@ -90,7 +105,7 @@ Price: ${VIP_PRICE}
 UPI: \`${VIP_UPI}\`
 
 After payment, contact admin:
-@${ADMIN_USERNAME}`, { parse_mode: "Markdown" });
+@${ADMIN_USERNAME}`, { parse_mode: 'Markdown' });
   }
 
   if (q.data === 'result_win' || q.data === 'result_loss') {
@@ -98,24 +113,29 @@ After payment, contact admin:
   }
 });
 
-// Period input
+// ===== PERIOD INPUT =====
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
   const userId = msg.from.id;
-  const text = msg.text;
+  const text = (msg.text || '').trim();
 
+  // Only accept numbers for period step
   if (!/^\d{3,}$/.test(text)) return;
 
   db.get(`SELECT * FROM users WHERE id=?`, [userId], (err, user) => {
-    if (!user) return;
+    if (err) return console.error(err);
+    if (!user) {
+      bot.sendMessage(chatId, `Please type /start first`);
+      return;
+    }
 
     const currentPeriod = user.period === 0 ? text : user.period;
     const nextP = nextPeriod(currentPeriod);
 
-    const history = JSON.parse(user.history || '[]');
+    const history = JSON.parse(user.history || '[]'); // BIG/SMALL history
     const prediction = smartPredict(history);
 
-    db.run(`UPDATE users SET period=? WHERE id=?`, [nextP, userId]);
+    db.run(`UPDATE users SET period=?, updated_at=strftime('%s','now') WHERE id=?`, [nextP, userId]);
 
     bot.sendMessage(chatId,
 `📊 *Prediction*
@@ -127,51 +147,51 @@ Bet: ₹${user.bet}
 
 Result select karo 👇`,
       {
-        parse_mode: "Markdown",
+        parse_mode: 'Markdown',
         reply_markup: {
           inline_keyboard: [
-            [{ text: "✅ WIN", callback_data: "result_win" }],
-            [{ text: "❌ LOSS", callback_data: "result_loss" }]
+            [{ text: '✅ WIN', callback_data: 'result_win' }],
+            [{ text: '❌ LOSS', callback_data: 'result_loss' }]
           ]
         }
       });
   });
 });
 
-// Handle Win/Loss via buttons
+// ===== WIN/LOSS HANDLER (Buttons) =====
 function handleResult(q, result) {
   const chatId = q.message.chat.id;
   const userId = q.from.id;
 
   db.get(`SELECT * FROM users WHERE id=?`, [userId], (err, user) => {
+    if (err) return console.error(err);
     if (!user) return;
 
     const maxLevel = user.mode === 'vip' ? 5 : 7;
+
     let history = JSON.parse(user.history || '[]');
+    // Map result to BIG/SMALL trend proxy: WIN -> keep last prediction effect; LOSS -> invert trend proxy
+    // Simpler: push BIG for win, SMALL for loss (heuristic)
+    history.push(result === 'win' ? 'BIG' : 'SMALL');
+    history = capHistory(history, 10);
 
     if (result === 'win') {
-      history.push('WIN');
-      if (history.length > 10) history.shift();
-
-      db.run(`UPDATE users SET level=1, bet=1, history=? WHERE id=?`,
+      db.run(`UPDATE users SET level=1, bet=1, history=?, updated_at=strftime('%s','now') WHERE id=?`,
         [JSON.stringify(history), userId]);
 
       bot.sendMessage(chatId,
         `✅ *WIN!*\nReset to Level 1\n\nSend next period number 👇`,
-        { parse_mode: "Markdown" });
+        { parse_mode: 'Markdown' });
 
     } else {
-      history.push('LOSS');
-      if (history.length > 10) history.shift();
-
       const nextLevel = user.level + 1;
       const nextBet = user.bet * 2;
 
       if (nextLevel > maxLevel) {
-        bot.sendMessage(chatId, `❌ Max ${maxLevel} Levels Reached. Session Ended.`);
+        bot.sendMessage(chatId, `❌ *Max ${maxLevel} Levels Reached.* Session Ended.\nType /start to begin again.`, { parse_mode: 'Markdown' });
         resetUser(userId, user.mode);
       } else {
-        db.run(`UPDATE users SET level=?, bet=?, history=? WHERE id=?`,
+        db.run(`UPDATE users SET level=?, bet=?, history=?, updated_at=strftime('%s','now') WHERE id=?`,
           [nextLevel, nextBet, JSON.stringify(history), userId]);
 
         bot.sendMessage(chatId,
@@ -180,8 +200,22 @@ Next Level: ${nextLevel}
 Next Bet: ₹${nextBet}
 
 Send next period number 👇`,
-          { parse_mode: "Markdown" });
+          { parse_mode: 'Markdown' });
       }
     }
   });
 }
+
+// ===== ADMIN: ADD VIP =====
+bot.onText(/\/addvip (\d+)/, (msg, match) => {
+  const chatId = msg.chat.id;
+  if (msg.from.username !== ADMIN_USERNAME) {
+    bot.sendMessage(chatId, `❌ You are not admin`);
+    return;
+  }
+  const targetId = match[1];
+  db.run(`UPDATE users SET vip=1, mode='vip', updated_at=strftime('%s','now') WHERE id=?`, [targetId]);
+  bot.sendMessage(chatId, `✅ User ${targetId} is now VIP`);
+});
+
+console.log('🤖 Bot is running...');
