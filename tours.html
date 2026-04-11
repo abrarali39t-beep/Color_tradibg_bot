@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kashmir Tour Packages – Aadi Tour &amp; Travel</title>
+<meta name="description" content="Explore Kashmir tour packages, honeymoon trips, Gulmarg, Pahalgam, Sonmarg. Book with Aadi Tour &amp; Travel, Pampore J&amp;K."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A2540'/><text y='.9em' font-size='70' x='10' fill='%23D4AF37'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.tours-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.tc{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md);transition:var(--ease)}
+.tc:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.tc-img{height:210px;overflow:hidden;position:relative}
+.tc-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.tc:hover .tc-img img{transform:scale(1.07)}
+.tc-badge{position:absolute;top:12px;left:12px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:99px;color:var(--white)}
+.b-pop{background:var(--sky)} .b-hon{background:#e91e63} .b-cus{background:var(--gold);color:var(--deep-blue)} .b-grp{background:#4caf50}
+.tc-body{padding:20px}
+.tc-body h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.tc-meta{display:flex;gap:12px;margin:8px 0;flex-wrap:wrap}
+.tc-meta span{font-size:11px;color:var(--text-light);display:flex;align-items:center;gap:4px}
+.tc-meta i{color:var(--sky);font-size:12px}
+.tc-body p{font-size:13px;color:var(--text-mid);line-height:1.7;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tc-inc{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.tc-inc span{font-size:10px;background:var(--bg-soft);color:var(--text-mid);padding:3px 9px;border-radius:99px;border:1px solid rgba(10,37,64,.1)}
+.tc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(10,37,64,.07)}
+.tc-price{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--deep-blue)}
+.tc-price small{font-size:12px;font-weight:400;color:var(--text-light);font-family:'Poppins',sans-serif}
+.tc-old{text-decoration:line-through;color:var(--text-light);font-size:14px;margin-right:4px}
+.tc-btns{display:flex;gap:7px;margin-top:10px}
+.tc-btns a,.tc-btns button{flex:1;justify-content:center;font-size:12px}
+.no-res{text-align:center;padding:60px 20px;color:var(--text-mid)}
+.no-res i{font-size:44px;color:var(--text-light);display:block;margin-bottom:14px}
+/* MODAL */
+.modal-ov{position:fixed;inset:0;z-index:8000;background:rgba(5,15,30,.92);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--white);border-radius:var(--r-lg);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-img{height:260px;overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.modal-body{padding:28px}
+.modal-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--text);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;border:none;transition:var(--ease)}
+.modal-close:hover{background:var(--deep-blue);color:var(--white)}
+.modal-body h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--deep-blue);margin-bottom:10px}
+.modal-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;font-size:12px;color:var(--text-mid)}
+.modal-meta span{display:flex;align-items:center;gap:5px}
+.modal-meta i{color:var(--sky)}
+.itin{margin:16px 0}
+.itin h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--deep-blue);margin-bottom:10px}
+.itin-day{display:flex;gap:10px;margin-bottom:8px}
+.itin-num{width:26px;height:26px;border-radius:50%;background:var(--deep-blue);color:var(--white);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.itin-day p{font-size:13px;color:var(--text-mid);line-height:1.6;padding-top:3px}
+.modal-btns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+@media(max-width:960px){.tours-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.tours-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="loader"><div class="ld-inner"><div class="ld-logo"><span class="ld-a">A</span><span class="ld-t">adi Tour &amp; Travel</span></div><div class="ld-bar"><div class="ld-fill"></div></div><p class="ld-sub">Loading packages…</p></div></div>
+<nav id="navbar" class="solid"><div class="nav-wrap">
+  <a href="index.html" class="nav-logo"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a>
+  <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="tours.html" class="active">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="about.html">About</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li><li><a href="book-now.html" class="nav-cta">Book Now</a></li></ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+<div class="page-hero">
+  <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1600&q=85" alt="Kashmir Tours" class="page-hero-bg" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600'"/>
+  <div class="page-hero-ov"></div>
+  <div class="page-hero-cnt"><div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><span>Tours</span></div><div class="eyebrow gold">Discover Kashmir</div><h1>Our <em>Tour Packages</em></h1><p>Handcrafted itineraries from quick getaways to epic Kashmir odysseys</p></div>
+</div>
+<section class="sec"><div class="container">
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-f="all">All Packages</button>
+    <button class="filter-btn" data-f="popular">Popular</button>
+    <button class="filter-btn" data-f="honeymoon">Honeymoon</button>
+    <button class="filter-btn" data-f="custom">Custom</button>
+    <button class="filter-btn" data-f="group">Group Tours</button>
+  </div>
+  <div class="tours-grid" id="toursGrid"><div class="no-res" style="grid-column:span 3"><i class="fas fa-spinner fa-spin"></i><p>Loading packages…</p></div></div>
+</div></section>
+<div class="modal-ov" id="tourModal"><div class="modal-box"><button class="modal-close" id="mClose"><i class="fas fa-times"></i></button><div class="modal-img"><img id="mImg" src="" alt=""/></div><div class="modal-body" id="mBody"></div></div></div>
+<footer class="footer"><div class="footer-top"><div class="container"><div class="footer-grid"><div class="f-brand"><a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:6px"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a><p>Your trusted partner for unforgettable Kashmir journeys.</p><a href="https://makemetop.in/?biz=41fdfe7OZyc2dCK8COnq" target="_blank" class="verified-link"><i class="fas fa-certificate"></i> Verified on MakeMeTop</a><div class="f-socials"><a href="https://www.facebook.com/profile.php?id=61578478771649" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/aadi_travel_world" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://youtube.com/@aaditourandtravel" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://wa.me/919596368558" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div><div class="f-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="f-col"><h4>Tour Types</h4><ul><li><a href="tours.html">Kashmir Tours</a></li><li><a href="tours.html">Honeymoon</a></li><li><a href="tours.html">Group Tours</a></li><li><a href="tours.html">Custom Tours</a></li></ul></div><div class="f-col"><h4>Contact</h4><div class="f-contact-item"><i class="fas fa-phone-alt"></i><a href="tel:+919596368558">+91 9596368558</a></div><div class="f-contact-item"><i class="fas fa-envelope"></i><a href="mailto:aaditourandtravel121@gmail.com">aaditourandtravel121@gmail.com</a></div></div></div></div></div><div class="footer-bottom"><div class="container"><p>© 2025 Aadi Tour &amp; Travel. All rights reserved.</p><p>Powered by <a href="https://makemetop.in" target="_blank">MakeMeTop</a></p></div></div></footer>
+<a href="https://wa.me/919596368558" target="_blank" class="wa-float"><i class="fab fa-whatsapp"></i><span class="wa-tip">Chat with us!</span></a>
+<button class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore,collection,getDocs,query,orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const fbCfg={  apiKey: "AIzaSyADiBZe0V5gTnB89Ik1Bby2NDo-9nRxAHc",
+  authDomain: "insta-web-upload.firebaseapp.com",
+  databaseURL: "https://insta-web-upload-default-rtdb.firebaseio.com",
+  projectId: "insta-web-upload",
+  storageBucket: "insta-web-upload.firebasestorage.app",
+  messagingSenderId: "1092302887537",
+  appId: "1:1092302887537:web:a1bb7595868c84c30999d0"};
+const DEFAULT=[
+  {id:'t1',title:'Classic Kashmir 5N/6D',category:'popular',duration:'5 Nights / 6 Days',groupSize:'2–8 People',price:'₹12,999',oldPrice:'₹16,000',destinations:'Srinagar, Gulmarg, Pahalgam',image:'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=700&q=80',description:'The ultimate Kashmir experience — houseboat on Dal Lake, Mughal Gardens, gondola ride in Gulmarg, Betaab Valley in Pahalgam and much more.',includes:['Hotel','Transport','Guide','Breakfast'],itinerary:['Arrival Srinagar, shikara ride on Dal Lake','Gulmarg Gondola ride & snow activities','Pahalgam — Betaab & Aru Valley','Srinagar sightseeing & Mughal Gardens','Shopping & departure']},
+  {id:'t2',title:'Honeymoon Delight 6N/7D',category:'honeymoon',duration:'6 Nights / 7 Days',groupSize:'Couple',price:'₹18,999',oldPrice:'₹24,000',destinations:'Srinagar, Gulmarg, Pahalgam',image:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80',description:'A romantic Kashmir escape with private houseboat stay, candlelit shikara ride, couple gondola in Gulmarg and Pahalgam meadows.',includes:['Houseboat','Transport','Guide','All Meals','Anniversary Cake'],itinerary:['Welcome & houseboat check-in Dal Lake','Shikara ride & Mughal Gardens','Gulmarg gondola & snowy meadows','Pahalgam — Betaab Valley','Sonmarg day trip','Free day in Srinagar','Departure']},
+  {id:'t3',title:'Weekend Escape 2N/3D',category:'popular',duration:'2 Nights / 3 Days',groupSize:'1–6 People',price:'₹6,499',oldPrice:'',destinations:'Srinagar',image:'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=700&q=80',description:'A quick Kashmir getaway — Dal Lake houseboat, Mughal Gardens, Nishat Bagh, local market tour and shikara ride.',includes:['Hotel','Transport','Breakfast'],itinerary:['Arrival & Dal Lake shikara ride','Mughal Gardens & Shankaracharya Temple','Shopping at Lal Chowk & departure']},
+  {id:'t4',title:'Sonmarg Glacier Trek',category:'custom',duration:'3 Nights / 4 Days',groupSize:'4–12 People',price:'₹9,999',oldPrice:'₹13,000',destinations:'Sonmarg, Thajiwas',image:'https://images.unsplash.com/photo-1519922639192-e73293ca430e?w=700&q=80',description:'Trek to Thajiwas Glacier, camp by the Sindh River, explore alpine meadows and experience the raw beauty of Sonmarg.',includes:['Camping','Transport','Guide','All Meals'],itinerary:['Arrive Srinagar, drive to Sonmarg','Thajiwas Glacier trek & camping','Sindh Valley nature walk','Return to Srinagar & departure']},
+  {id:'t5',title:'Group Kashmir 7N/8D',category:'group',duration:'7 Nights / 8 Days',groupSize:'10–25 People',price:'₹10,999',oldPrice:'₹15,000',destinations:'Srinagar, Gulmarg, Pahalgam, Sonmarg',image:'https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=700&q=80',description:'Our most comprehensive group package covering all four major Kashmir destinations with group activities and expert local guides.',includes:['Hotel','Tempo Traveller','Guide','Breakfast+Dinner'],itinerary:['Arrival & Dal Lake','Gulmarg gondola & snow','Pahalgam sightseeing','Betaab & Chandanwari','Sonmarg glacier','Srinagar city tour','Shopping day','Departure']},
+  {id:'t6',title:'Custom Family Tour',category:'custom',duration:'Flexible',groupSize:'Any Size',price:'On Request',oldPrice:'',destinations:'As Per Requirement',image:'https://images.unsplash.com/photo-1566837945700-30057527ade0?w=700&q=80',description:"Tell us your dream trip and we'll build it from scratch — dates, budget, family size, interests. Fully tailor-made itineraries.",includes:['Flexible','Personalised','Dedicated Guide'],itinerary:['Completely customised as per your preferences']},
+];
+let all=[...DEFAULT];
+try{const app=initializeApp(fbCfg);const db=getFirestore(app);const s=await getDocs(query(collection(db,'tours'),orderBy('order','asc')));if(!s.empty){all=[];s.forEach(d=>all.push({id:d.id,...d.data()}));}}catch(e){}
+const grid=document.getElementById('toursGrid');
+const modal=document.getElementById('tourModal');
+const bMap={popular:'b-pop',honeymoon:'b-hon',custom:'b-cus',group:'b-grp'};
+function render(f){
+  const list=f==='all'?all:all.filter(t=>t.category===f);
+  grid.innerHTML='';
+  if(!list.length){grid.innerHTML='<div class="no-res" style="grid-column:span 3"><i class="fas fa-binoculars"></i><p>No packages in this category.</p></div>';return;}
+  list.forEach((t,i)=>{
+    const c=document.createElement('div');c.className='tc reveal';
+    c.innerHTML=`<div class="tc-img"><img src="${t.image||''}" alt="${t.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700'"/>${t.category?`<span class="tc-badge ${bMap[t.category]||'b-pop'}">${t.category}</span>`:''}</div>
+    <div class="tc-body"><h3>${t.title||''}</h3>
+    <div class="tc-meta"><span><i class="fas fa-clock"></i>${t.duration||''}</span><span><i class="fas fa-users"></i>${t.groupSize||''}</span><span><i class="fas fa-map-marker-alt"></i>${t.destinations||''}</span></div>
+    <p>${t.description||''}</p>
+    <div class="tc-inc">${(t.includes||[]).map(x=>`<span>${x}</span>`).join('')}</div>
+    <div class="tc-foot"><div class="tc-price">${t.oldPrice?`<span class="tc-old">${t.oldPrice}</span>`:''}${t.price}<small>/person</small></div></div>
+    <div class="tc-btns"><a href="book-now.html?tour=${encodeURIComponent(t.title)}" class="btn-primary sm"><i class="fas fa-paper-plane"></i> Book</a><button class="btn-dark" style="font-size:12px" onclick="openM('${t.id}')"><i class="fas fa-info-circle"></i> Details</button></div>
+    </div>`;
+    grid.appendChild(c);
+    setTimeout(()=>c.classList.add('in'),i*80);
+  });
+}
+window.openM=function(id){
+  const t=all.find(x=>x.id===id);if(!t)return;
+  document.getElementById('mImg').src=t.image||'';document.getElementById('mImg').onerror=function(){this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700';};
+  document.getElementById('mBody').innerHTML=`<h2>${t.title}</h2><div class="modal-meta"><span><i class="fas fa-clock"></i>${t.duration}</span><span><i class="fas fa-users"></i>${t.groupSize}</span><span><i class="fas fa-map-marker-alt"></i>${t.destinations}</span><span><i class="fas fa-rupee-sign"></i>${t.price}/person</span></div><p style="font-size:14px;color:var(--text-mid);line-height:1.8;margin-bottom:14px">${t.description}</p>${t.itinerary?.length?`<div class="itin"><h4>Day-by-Day Itinerary</h4>${t.itinerary.map((d,i)=>`<div class="itin-day"><div class="itin-num">${i+1}</div><p>${d}</p></div>`).join('')}</div>`:''}<div class="tc-inc" style="margin:14px 0">${(t.includes||[]).map(x=>`<span>${x}</span>`).join('')}</div><div class="modal-btns"><a href="book-now.html?tour=${encodeURIComponent(t.title)}" class="btn-primary"><i class="fas fa-paper-plane"></i> Book This Package</a><a href="https://wa.me/919596368558?text=Hi!%20I%27m%20interested%20in%20${encodeURIComponent(t.title)}" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a></div>`;
+  modal.classList.add('open');document.body.style.overflow='hidden';
+};
+document.getElementById('mClose').addEventListener('click',()=>{modal.classList.remove('open');document.body.style.overflow='';});
+modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.remove('open');document.body.style.overflow='';}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');document.body.style.overflow='';}});
+document.getElementById('filterRow').addEventListener('click',e=>{const b=e.target.closest('.filter-btn');if(!b)return;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.f);});
+render('all');
+</script>
+<script>
+(function(){window.addEventListener('load',function(){setTimeout(function(){var l=document.getElementById('loader');if(l)l.classList.add('hidden');},1200);});var nb=document.getElementById('navbar');window.addEventListener('scroll',function(){if(nb)nb.classList.toggle('scrolled',window.scrollY>60);var st=document.getElementById('scrollTop');if(st)st.classList.toggle('show',window.scrollY>400);},{passive:true});var hbg=document.getElementById('hamburger'),nls=document.getElementById('navLinks');if(hbg&&nls){hbg.addEventListener('click',function(e){e.stopPropagation();var o=hbg.classList.toggle('open');nls.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});nls.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';});});document.addEventListener('click',function(e){if(nls.classList.contains('open')&&!nls.contains(e.target)&&!hbg.contains(e.target)){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});}var stb=document.getElementById('scrollTop');if(stb)stb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});})();
+</script>
+</body></html>

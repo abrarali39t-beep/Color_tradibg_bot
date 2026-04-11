@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Gallery – Kashmir Photography | Aadi Tour &amp; Travel</title>
+<meta name="description" content="Beautiful Kashmir photography gallery — Dal Lake, Gulmarg, Pahalgam, Sonmarg by Aadi Tour &amp; Travel."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A2540'/><text y='.9em' font-size='70' x='10' fill='%23D4AF37'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.gal-grid{columns:3;gap:14px;column-fill:balance}
+.gal-item{break-inside:avoid;margin-bottom:14px;border-radius:var(--r-md);overflow:hidden;cursor:pointer;position:relative;display:block}
+.gal-item img{width:100%;display:block;transition:transform .5s ease}
+.gal-item:hover img{transform:scale(1.05)}
+.gal-ov{position:absolute;inset:0;background:rgba(10,37,64,0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:var(--ease);color:var(--white)}
+.gal-item:hover .gal-ov{background:rgba(10,37,64,.62)}
+.gal-ov i{font-size:22px;opacity:0;transform:scale(.5);transition:var(--ease)}
+.gal-ov span{font-size:12px;font-weight:600;opacity:0;transform:translateY(6px);transition:var(--ease);text-align:center;padding:0 10px}
+.gal-item:hover .gal-ov i{opacity:1;transform:scale(1)}
+.gal-item:hover .gal-ov span{opacity:1;transform:translateY(0)}
+.lb{position:fixed;inset:0;z-index:9000;background:rgba(3,10,22,.96);backdrop-filter:blur(10px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lb.open{display:flex}
+.lb-img{max-width:90vw;max-height:78vh;border-radius:var(--r-lg);object-fit:contain;box-shadow:var(--shadow-lg)}
+.lb-cap{color:rgba(255,255,255,.68);font-size:13px;margin-top:14px;text-align:center}
+.lb-close{position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);color:var(--white);font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--ease);border:none}
+.lb-close:hover{background:rgba(255,255,255,.2)}
+.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.1);color:var(--white);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--ease);border:none}
+.lb-prev{left:14px}.lb-next{right:14px}
+.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.2)}
+@media(max-width:900px){.gal-grid{columns:2}}
+@media(max-width:480px){.gal-grid{columns:1}}
+</style>
+</head>
+<body>
+<div id="loader"><div class="ld-inner"><div class="ld-logo"><span class="ld-a">A</span><span class="ld-t">adi Tour &amp; Travel</span></div><div class="ld-bar"><div class="ld-fill"></div></div><p class="ld-sub">Loading gallery…</p></div></div>
+<nav id="navbar" class="solid"><div class="nav-wrap">
+  <a href="index.html" class="nav-logo"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a>
+  <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="about.html">About</a></li><li><a href="gallery.html" class="active">Gallery</a></li><li><a href="contact.html">Contact</a></li><li><a href="book-now.html" class="nav-cta">Book Now</a></li></ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div></nav>
+<div class="page-hero"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=85" alt="Gallery" class="page-hero-bg" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600'"/><div class="page-hero-ov"></div><div class="page-hero-cnt"><div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><span>Gallery</span></div><div class="eyebrow gold">Visual Journey</div><h1>Kashmir Through <em>Our Lens</em></h1><p>A glimpse into the paradise we call home</p></div></div>
+<section class="sec"><div class="container">
+  <div class="filter-row" id="galFilters">
+    <button class="filter-btn active" data-c="all">All Photos</button>
+    <button class="filter-btn" data-c="srinagar">Srinagar</button>
+    <button class="filter-btn" data-c="gulmarg">Gulmarg</button>
+    <button class="filter-btn" data-c="pahalgam">Pahalgam</button>
+    <button class="filter-btn" data-c="sonmarg">Sonmarg</button>
+    <button class="filter-btn" data-c="people">People &amp; Culture</button>
+  </div>
+  <div class="gal-grid" id="galGrid"><p style="text-align:center;padding:40px;color:var(--text-mid)"><i class="fas fa-spinner fa-spin"></i> Loading…</p></div>
+</div></section>
+<div class="lb" id="lb">
+  <button class="lb-close" id="lbClose"><i class="fas fa-times"></i></button>
+  <button class="lb-prev" id="lbPrev"><i class="fas fa-chevron-left"></i></button>
+  <img class="lb-img" id="lbImg" src="" alt=""/>
+  <p class="lb-cap" id="lbCap"></p>
+  <button class="lb-next" id="lbNext"><i class="fas fa-chevron-right"></i></button>
+</div>
+<footer class="footer"><div class="footer-top"><div class="container"><div class="footer-grid"><div class="f-brand"><a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:6px"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a><p>Your trusted partner for unforgettable Kashmir journeys.</p><a href="https://makemetop.in/?biz=41fdfe7OZyc2dCK8COnq" target="_blank" class="verified-link"><i class="fas fa-certificate"></i> Verified on MakeMeTop</a><div class="f-socials"><a href="https://www.facebook.com/profile.php?id=61578478771649" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/aadi_travel_world" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://youtube.com/@aaditourandtravel" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://wa.me/919596368558" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div><div class="f-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="f-col"><h4>Services</h4><ul><li><a href="tours.html">Kashmir Tours</a></li><li><a href="tours.html">Honeymoon</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="book-now.html">Book Now</a></li></ul></div><div class="f-col"><h4>Contact</h4><div class="f-contact-item"><i class="fas fa-phone-alt"></i><a href="tel:+919596368558">+91 9596368558</a></div><div class="f-contact-item"><i class="fas fa-envelope"></i><a href="mailto:aaditourandtravel121@gmail.com">aaditourandtravel121@gmail.com</a></div><div class="f-contact-item"><i class="fas fa-map-marker-alt"></i><span>Pampore, J&amp;K – 192122</span></div></div></div></div></div><div class="footer-bottom"><div class="container"><p>© 2025 Aadi Tour &amp; Travel. All rights reserved.</p><p>Powered by <a href="https://makemetop.in" target="_blank">MakeMeTop</a></p></div></div></footer>
+<a href="https://wa.me/919596368558" target="_blank" class="wa-float"><i class="fab fa-whatsapp"></i><span class="wa-tip">Chat with us!</span></a>
+<button class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore,collection,getDocs,query,orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const fbCfg={  apiKey: "AIzaSyADiBZe0V5gTnB89Ik1Bby2NDo-9nRxAHc",
+  authDomain: "insta-web-upload.firebaseapp.com",
+  databaseURL: "https://insta-web-upload-default-rtdb.firebaseio.com",
+  projectId: "insta-web-upload",
+  storageBucket: "insta-web-upload.firebasestorage.app",
+  messagingSenderId: "1092302887537",
+  appId: "1:1092302887537:web:a1bb7595868c84c30999d0"};
+const DEFAULT=[
+  {url:'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&q=85',caption:'Dal Lake at Sunrise, Srinagar',category:'srinagar'},
+  {url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85',caption:'Shikara Ride, Dal Lake',category:'srinagar'},
+  {url:'https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=800&q=85',caption:'Gulmarg Snow Fields',category:'gulmarg'},
+  {url:'https://images.unsplash.com/photo-1566837945700-30057527ade0?w=800&q=85',caption:'Betaab Valley, Pahalgam',category:'pahalgam'},
+  {url:'https://images.unsplash.com/photo-1519922639192-e73293ca430e?w=800&q=85',caption:'Thajiwas Glacier, Sonmarg',category:'sonmarg'},
+  {url:'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800&q=85',caption:'Kashmir Valley Panorama',category:'srinagar'},
+  {url:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85',caption:'Pahalgam Green Meadows',category:'pahalgam'},
+  {url:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=85',caption:'Himalayan Mountain Range',category:'sonmarg'},
+  {url:'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=85',caption:'Sunset over Kashmir',category:'srinagar'},
+  {url:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=85',caption:'Alpine Lake Reflection',category:'sonmarg'},
+  {url:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=85',caption:'Mountain Trekking Trail',category:'pahalgam'},
+  {url:'https://images.unsplash.com/photo-1520350094754-f0fdcac35c1c?w=800&q=85',caption:'Kashmiri Weavers at Work',category:'people'},
+  {url:'https://images.unsplash.com/photo-1598902108854-10e335adac99?w=800&q=85',caption:'Gulmarg Gondola Ride',category:'gulmarg'},
+  {url:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=85',caption:'Nishat Bagh Mughal Garden',category:'srinagar'},
+  {url:'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=800&q=85',caption:'Mountain Village Life',category:'people'},
+  {url:'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=800&q=85',caption:'Kashmir Countryside',category:'pahalgam'},
+];
+let allImgs=[...DEFAULT],filtered=[...DEFAULT],cur=0;
+try{const app=initializeApp(fbCfg);const db=getFirestore(app);const s=await getDocs(query(collection(db,'gallery'),orderBy('order','asc')));if(!s.empty){allImgs=[];s.forEach(d=>allImgs.push(d.data()));filtered=[...allImgs];}}catch(e){}
+const grid=document.getElementById('galGrid');
+function render(cat){
+  filtered=cat==='all'?[...allImgs]:allImgs.filter(i=>i.category===cat);
+  grid.innerHTML='';
+  if(!filtered.length){grid.innerHTML='<p style="text-align:center;padding:40px;color:var(--text-mid)">No images in this category yet.</p>';return;}
+  filtered.forEach((img,i)=>{
+    const el=document.createElement('div');el.className='gal-item';
+    el.innerHTML=`<img src="${img.url}" alt="${img.caption||''}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'"/><div class="gal-ov"><i class="fas fa-expand"></i><span>${img.caption||''}</span></div>`;
+    el.addEventListener('click',()=>openLb(i));
+    grid.appendChild(el);
+  });
+}
+function openLb(i){cur=i;document.getElementById('lbImg').src=filtered[i].url||'';document.getElementById('lbImg').onerror=function(){this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800';};document.getElementById('lbCap').textContent=filtered[i].caption||'';document.getElementById('lb').classList.add('open');document.body.style.overflow='hidden';}
+function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('lbClose').onclick=closeLb;
+document.getElementById('lb').addEventListener('click',e=>{if(e.target===document.getElementById('lb'))closeLb();});
+document.getElementById('lbPrev').onclick=()=>openLb((cur-1+filtered.length)%filtered.length);
+document.getElementById('lbNext').onclick=()=>openLb((cur+1)%filtered.length);
+document.addEventListener('keydown',e=>{if(!document.getElementById('lb').classList.contains('open'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')openLb((cur-1+filtered.length)%filtered.length);if(e.key==='ArrowRight')openLb((cur+1)%filtered.length);});
+document.getElementById('galFilters').addEventListener('click',e=>{const b=e.target.closest('.filter-btn');if(!b)return;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.c);});
+render('all');
+</script>
+<script>
+(function(){window.addEventListener('load',function(){setTimeout(function(){var l=document.getElementById('loader');if(l)l.classList.add('hidden');},1200);});var nb=document.getElementById('navbar');window.addEventListener('scroll',function(){if(nb)nb.classList.toggle('scrolled',window.scrollY>60);var st=document.getElementById('scrollTop');if(st)st.classList.toggle('show',window.scrollY>400);},{passive:true});var hbg=document.getElementById('hamburger'),nls=document.getElementById('navLinks');if(hbg&&nls){hbg.addEventListener('click',function(e){e.stopPropagation();var o=hbg.classList.toggle('open');nls.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});nls.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';});});document.addEventListener('click',function(e){if(nls.classList.contains('open')&&!nls.contains(e.target)&&!hbg.contains(e.target)){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});}var stb=document.getElementById('scrollTop');if(stb)stb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:0.08});document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});})();
+</script>
+</body></html>

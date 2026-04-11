@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Book Now – Aadi Tour &amp; Travel Kashmir</title>
+<meta name="description" content="Book your Kashmir tour with Aadi Tour & Travel. Confirm your trip in minutes."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A2540'/><text y='.9em' font-size='70' x='10' fill='%23D4AF37'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.book-layout{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start}
+.book-card{background:var(--white);border-radius:var(--r-lg);padding:36px;box-shadow:var(--shadow-md)}
+.book-card h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--deep-blue);margin-bottom:22px}
+.book-card h2 em{font-style:italic;color:var(--sky)}
+.steps{display:flex;gap:0;margin-bottom:26px;position:relative}
+.steps::before{content:'';position:absolute;top:17px;left:18px;right:18px;height:2px;background:var(--bg-soft);z-index:0}
+.step{flex:1;text-align:center;position:relative;z-index:1}
+.step-n{width:34px;height:34px;border-radius:50%;background:var(--bg-soft);color:var(--text-light);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;transition:var(--ease);border:2px solid transparent}
+.step.on .step-n{background:var(--deep-blue);color:var(--white);border-color:var(--deep-blue)}
+.step.done .step-n{background:var(--sky);color:var(--white);border-color:var(--sky)}
+.step label{font-size:11px;color:var(--text-light);font-weight:500;display:block}
+.step.on label{color:var(--deep-blue);font-weight:700}
+.step-sec{display:none}
+.step-sec.on{display:block}
+.step-nav{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.sb-sticky{display:flex;flex-direction:column;gap:18px;position:sticky;top:82px}
+.sb-card{background:var(--deep-blue);border-radius:var(--r-lg);padding:24px;color:var(--white)}
+.sb-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:14px}
+.sb-card h3 em{font-style:italic;color:var(--gold)}
+.sb-item{display:flex;gap:9px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.65)}
+.sb-item i{color:var(--sky);width:15px;flex-shrink:0;margin-top:2px}
+.sum-card{background:var(--white);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-md)}
+.sum-card h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+.sum-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text-mid);padding:5px 0;border-bottom:1px solid var(--bg-soft)}
+.sum-row:last-of-type{border:none;font-weight:700;color:var(--deep-blue)}
+.review-box{background:var(--bg-soft);border-radius:var(--r-md);padding:18px;font-size:13px;color:var(--text-mid);line-height:2;margin-bottom:16px}
+.review-box b{color:var(--text)}
+.success-wrap{text-align:center;padding:44px 20px}
+.success-wrap i{font-size:62px;color:#25D366;display:block;margin-bottom:18px;animation:popIn .5s ease}
+@keyframes popIn{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+.success-wrap h2{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--deep-blue);margin-bottom:10px}
+.success-wrap p{color:var(--text-mid);max-width:380px;margin:0 auto 24px}
+@media(max-width:900px){.book-layout{grid-template-columns:1fr}.sb-sticky{position:static}}
+@media(max-width:500px){.step label{display:none}}
+</style>
+</head>
+<body>
+<div id="loader"><div class="ld-inner"><div class="ld-logo"><span class="ld-a">A</span><span class="ld-t">adi Tour &amp; Travel</span></div><div class="ld-bar"><div class="ld-fill"></div></div><p class="ld-sub">Setting up your booking…</p></div></div>
+<nav id="navbar" class="solid"><div class="nav-wrap">
+  <a href="index.html" class="nav-logo"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a>
+  <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="about.html">About</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li><li><a href="book-now.html" class="nav-cta">Book Now</a></li></ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div></nav>
+<div class="page-hero"><img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1600&q=85" alt="Book" class="page-hero-bg" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600'"/><div class="page-hero-ov"></div><div class="page-hero-cnt"><div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><span>Book Now</span></div><div class="eyebrow gold">Start Your Journey</div><h1>Book Your <em>Kashmir Trip</em></h1><p>Fill in details and we confirm within 2 hours</p></div></div>
+<section class="sec"><div class="container">
+  <div class="book-layout" id="bookLayout">
+    <div class="book-card reveal">
+      <h2>Your <em>Booking Details</em></h2>
+      <div class="steps">
+        <div class="step on" id="step1"><div class="step-n">1</div><label>Personal Info</label></div>
+        <div class="step" id="step2"><div class="step-n">2</div><label>Trip Details</label></div>
+        <div class="step" id="step3"><div class="step-n">3</div><label>Confirm</label></div>
+      </div>
+      <form id="bookForm" novalidate>
+        <!-- STEP 1 -->
+        <div class="step-sec on" data-step="1">
+          <div class="form-row">
+            <div class="fg"><label>Full Name *</label><input type="text" id="bName" name="name" placeholder="Your full name" required/></div>
+            <div class="fg"><label>Phone Number *</label><input type="tel" id="bPhone" name="phone" placeholder="+91 XXXXX XXXXX" required/></div>
+          </div>
+          <div class="fg"><label>Email Address</label><input type="email" id="bEmail" name="email" placeholder="you@example.com"/></div>
+          <div class="fg"><label>City / State</label><input type="text" id="bCity" name="city" placeholder="Where are you travelling from?"/></div>
+          <p id="err1" style="color:var(--red);font-size:12px;display:none;margin-bottom:8px">Please enter your name and phone number.</p>
+          <div class="step-nav"><button type="button" class="btn-primary" onclick="goStep(2)">Next Step <i class="fas fa-arrow-right"></i></button></div>
+        </div>
+        <!-- STEP 2 -->
+        <div class="step-sec" data-step="2">
+          <div class="form-row">
+            <div class="fg"><label>Travel Date *</label><input type="date" id="bDate" name="travelDate" required/></div>
+            <div class="fg"><label>Return Date</label><input type="date" id="bReturn" name="returnDate"/></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>No. of Adults</label><input type="number" id="bAdults" name="adults" placeholder="2" min="1" value="2"/></div>
+            <div class="fg"><label>No. of Children</label><input type="number" id="bChildren" name="children" placeholder="0" min="0" value="0"/></div>
+          </div>
+          <div class="fg"><label>Package Type *</label>
+            <select id="bPkg" name="packageType" required>
+              <option value="">Select a package</option>
+              <option value="Classic Kashmir 5N/6D">Classic Kashmir 5N/6D – ₹12,999/person</option>
+              <option value="Honeymoon Delight 6N/7D">Honeymoon Delight 6N/7D – ₹18,999/person</option>
+              <option value="Weekend Escape 2N/3D">Weekend Escape 2N/3D – ₹6,499/person</option>
+              <option value="Sonmarg Glacier Trek">Sonmarg Glacier Trek – ₹9,999/person</option>
+              <option value="Group Kashmir 7N/8D">Group Kashmir 7N/8D – ₹10,999/person</option>
+              <option value="Custom Tour">Custom Tour – Price on request</option>
+              <option value="Car Rental Only">Car Rental Only</option>
+            </select>
+          </div>
+          <div class="fg"><label>Accommodation Preference</label>
+            <select id="bAccom" name="accommodation">
+              <option value="No preference">No preference</option>
+              <option value="Houseboat on Dal Lake">Houseboat on Dal Lake</option>
+              <option value="3-Star Hotel">3-Star Hotel</option>
+              <option value="4-Star Hotel">4-Star Hotel</option>
+              <option value="5-Star Resort">5-Star Hotel / Resort</option>
+              <option value="Budget Guesthouse">Budget Guesthouse</option>
+            </select>
+          </div>
+          <div class="fg"><label>Special Requests</label><textarea id="bReq" name="requests" rows="3" style="width:100%;padding:11px 14px;border:1.5px solid rgba(10,37,64,.13);border-radius:var(--r-sm);font-size:13px;font-family:'Poppins',sans-serif;outline:none;resize:vertical;background:var(--bg)" placeholder="Anniversary arrangements, dietary needs, specific destinations…"></textarea></div>
+          <p id="err2" style="color:var(--red);font-size:12px;display:none;margin-bottom:8px">Please select a package and travel date.</p>
+          <div class="step-nav">
+            <button type="button" class="btn-dark" onclick="goStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn-primary" onclick="goStep(3)">Review Booking <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+        <!-- STEP 3 -->
+        <div class="step-sec" data-step="3">
+          <div class="review-box" id="reviewBox"></div>
+          <div style="background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.25);border-radius:var(--r-sm);padding:14px;font-size:13px;color:var(--text-mid);margin-bottom:16px">
+            <i class="fas fa-info-circle" style="color:var(--gold);margin-right:6px"></i>By submitting, you agree to be contacted by our team within 2 hours to confirm your booking and discuss payment options.
+          </div>
+          <div class="step-nav">
+            <button type="button" class="btn-dark" onclick="goStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="submit" class="btn-primary" id="confirmBtn"><i class="fas fa-paper-plane"></i> Confirm Booking</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- SIDEBAR -->
+    <div class="sb-sticky">
+      <div class="sb-card reveal">
+        <h3>Why Book With <em>Us?</em></h3>
+        <div class="sb-item"><i class="fas fa-shield-alt"></i><span>Government recognized &amp; verified agency</span></div>
+        <div class="sb-item"><i class="fas fa-tag"></i><span>Best price guarantee — no hidden fees</span></div>
+        <div class="sb-item"><i class="fas fa-headset"></i><span>24/7 support throughout your trip</span></div>
+        <div class="sb-item"><i class="fas fa-map-pin"></i><span>Local experts with 10+ years experience</span></div>
+        <div class="sb-item"><i class="fas fa-ban"></i><span>Free cancellation up to 48 hours before</span></div>
+        <a href="https://wa.me/919596368558?text=Hi!%20I%20want%20to%20book%20a%20Kashmir%20trip." target="_blank" class="btn-wa" style="width:100%;justify-content:center;margin-top:12px"><i class="fab fa-whatsapp"></i> Quick WhatsApp Booking</a>
+      </div>
+      <div class="sum-card reveal">
+        <h4>Booking Summary</h4>
+        <div class="sum-row"><span>Package</span><span id="sumPkg">Not selected</span></div>
+        <div class="sum-row"><span>Travel Date</span><span id="sumDate">Not set</span></div>
+        <div class="sum-row"><span>Travellers</span><span id="sumTrav">—</span></div>
+        <div class="sum-row"><span>Status</span><span style="color:var(--sky);font-weight:600">Pending</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+<footer class="footer"><div class="footer-top"><div class="container"><div class="footer-grid"><div class="f-brand"><a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:6px"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a><p>Kashmir journeys crafted with love.</p><a href="https://makemetop.in/?biz=41fdfe7OZyc2dCK8COnq" target="_blank" class="verified-link"><i class="fas fa-certificate"></i> Verified on MakeMeTop</a><div class="f-socials"><a href="https://www.facebook.com/profile.php?id=61578478771649" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/aadi_travel_world" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://youtube.com/@aaditourandtravel" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://wa.me/919596368558" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div><div class="f-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="f-col"><h4>Services</h4><ul><li><a href="tours.html">Kashmir Tours</a></li><li><a href="tours.html">Honeymoon</a></li><li><a href="car-rentals.html">Car Rentals</a></li></ul></div><div class="f-col"><h4>Contact</h4><div class="f-contact-item"><i class="fas fa-phone-alt"></i><a href="tel:+919596368558">+91 9596368558</a></div><div class="f-contact-item"><i class="fas fa-envelope"></i><a href="mailto:aaditourandtravel121@gmail.com">aaditourandtravel121@gmail.com</a></div></div></div></div></div><div class="footer-bottom"><div class="container"><p>© 2025 Aadi Tour &amp; Travel. All rights reserved.</p><p>Powered by <a href="https://makemetop.in" target="_blank">MakeMeTop</a></p></div></div></footer>
+<a href="https://wa.me/919596368558" target="_blank" class="wa-float"><i class="fab fa-whatsapp"></i><span class="wa-tip">Chat with us!</span></a>
+<button class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore,collection,addDoc,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const fbCfg={  apiKey: "AIzaSyADiBZe0V5gTnB89Ik1Bby2NDo-9nRxAHc",
+  authDomain: "insta-web-upload.firebaseapp.com",
+  databaseURL: "https://insta-web-upload-default-rtdb.firebaseio.com",
+  projectId: "insta-web-upload",
+  storageBucket: "insta-web-upload.firebasestorage.app",
+  messagingSenderId: "1092302887537",
+  appId: "1:1092302887537:web:a1bb7595868c84c30999d0"};
+let db=null;
+try{const app=initializeApp(fbCfg);db=getFirestore(app);}catch(e){console.warn('Firebase:',e);}
+
+// Pre-fill from URL params
+const urlP=new URLSearchParams(location.search);
+const urlTour=urlP.get('tour');
+const urlVeh=urlP.get('vehicle');
+if(urlTour){const s=document.getElementById('bPkg');if(s){for(let o of s.options){if(o.value.startsWith(urlTour.split(' ')[0])){s.value=o.value;break;}}}}
+if(urlVeh){const s=document.getElementById('bPkg');if(s)s.value='Car Rental Only';}
+
+window.goStep=function(n){
+  // Validate before moving forward
+  if(n>1){
+    if(n==2||n==3){
+      const nm=document.getElementById('bName').value.trim();
+      const ph=document.getElementById('bPhone').value.trim();
+      if(!nm||!ph){document.getElementById('err1').style.display='block';return;}
+      document.getElementById('err1').style.display='none';
+    }
+    if(n==3){
+      const pkg=document.getElementById('bPkg').value;
+      const dt=document.getElementById('bDate').value;
+      if(!pkg||!dt){document.getElementById('err2').style.display='block';return;}
+      document.getElementById('err2').style.display='none';
+      // Build review
+      const nm=document.getElementById('bName').value.trim();
+      const ph=document.getElementById('bPhone').value.trim();
+      const em=document.getElementById('bEmail').value.trim();
+      const ct=document.getElementById('bCity').value.trim();
+      const ad=document.getElementById('bAdults').value;
+      const ch=document.getElementById('bChildren').value;
+      const ac=document.getElementById('bAccom').value;
+      const rq=document.getElementById('bReq').value.trim();
+      document.getElementById('reviewBox').innerHTML=`<b>Name:</b> ${nm}<br/><b>Phone:</b> ${ph}${em?'<br/><b>Email:</b> '+em:''}${ct?'<br/><b>City:</b> '+ct:''}<br/><b>Package:</b> ${pkg}<br/><b>Travel Date:</b> ${dt}<br/><b>Adults:</b> ${ad} | <b>Children:</b> ${ch}<br/><b>Accommodation:</b> ${ac}${rq?'<br/><b>Special Requests:</b> '+rq:''}`;
+      document.getElementById('sumPkg').textContent=pkg;
+      document.getElementById('sumDate').textContent=dt;
+      document.getElementById('sumTrav').textContent=ad+' Adult'+((ad>1)?'s':'')+(ch>0?', '+ch+' Child'+((ch>1)?'ren':''):'');
+    }
+  }
+  document.querySelectorAll('.step-sec').forEach(function(s,i){s.classList.toggle('on',i+1===n);});
+  document.querySelectorAll('.step').forEach(function(s,i){s.classList.remove('on','done');if(i+1===n)s.classList.add('on');if(i+1<n)s.classList.add('done');});
+  window.scrollTo({top:document.querySelector('.book-card').offsetTop-80,behavior:'smooth'});
+};
+
+document.getElementById('bookForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=document.getElementById('confirmBtn');
+  btn.disabled=true;
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Confirming…';
+  const data={
+    name:document.getElementById('bName').value.trim(),
+    phone:document.getElementById('bPhone').value.trim(),
+    email:document.getElementById('bEmail').value.trim()||'',
+    city:document.getElementById('bCity').value.trim()||'',
+    travelDate:document.getElementById('bDate').value||'',
+    returnDate:document.getElementById('bReturn').value||'',
+    adults:document.getElementById('bAdults').value||'2',
+    children:document.getElementById('bChildren').value||'0',
+    packageType:document.getElementById('bPkg').value||'',
+    accommodation:document.getElementById('bAccom').value||'',
+    requests:document.getElementById('bReq').value.trim()||'',
+    source:'book_now',
+    status:'pending',
+    createdAt:serverTimestamp()
+  };
+  try{
+    if(db){await addDoc(collection(db,'bookings'),data);console.log('Booking saved to Firestore');}
+    // Show success
+    document.getElementById('bookLayout').innerHTML=`<div style="grid-column:span 2"><div class="success-wrap"><i class="fas fa-check-circle"></i><h2>Booking Confirmed!</h2><p>Your booking request has been received. Our team will call you at <strong>${data.phone}</strong> within 2 hours to confirm all details and payment.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px"><a href="https://wa.me/919596368558?text=Hi!%20My%20booking%20for%20${encodeURIComponent(data.packageType)}%20on%20${data.travelDate}%20is%20confirmed.%20My%20name%20is%20${encodeURIComponent(data.name)}" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> Confirm on WhatsApp</a><a href="index.html" class="btn-dark">Back to Home</a></div></div></div>`;
+  }catch(err){
+    console.error('Booking error:',err);
+    btn.disabled=false;
+    btn.innerHTML='<i class="fas fa-paper-plane"></i> Confirm Booking';
+    alert('There was an error saving your booking. Please try WhatsApp: +91 9596368558');
+  }
+});
+</script>
+<script>
+(function(){window.addEventListener('load',function(){setTimeout(function(){var l=document.getElementById('loader');if(l)l.classList.add('hidden');},1200);});var nb=document.getElementById('navbar');window.addEventListener('scroll',function(){if(nb)nb.classList.toggle('scrolled',window.scrollY>60);var st=document.getElementById('scrollTop');if(st)st.classList.toggle('show',window.scrollY>400);},{passive:true});var hbg=document.getElementById('hamburger'),nls=document.getElementById('navLinks');if(hbg&&nls){hbg.addEventListener('click',function(e){e.stopPropagation();var o=hbg.classList.toggle('open');nls.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});nls.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';});});document.addEventListener('click',function(e){if(nls.classList.contains('open')&&!nls.contains(e.target)&&!hbg.contains(e.target)){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});}var stb=document.getElementById('scrollTop');if(stb)stb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}}); },{threshold:0.08});document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});})();
+</script>
+</body></html>

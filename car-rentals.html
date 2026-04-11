@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Car Rentals &amp; Taxi – Aadi Tour &amp; Travel Kashmir</title>
+<meta name="description" content="Comfortable car rentals and taxi services in Kashmir. Sedan, SUV, Innova, Tempo Traveller from Aadi Tour &amp; Travel, Pampore."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A2540'/><text y='.9em' font-size='70' x='10' fill='%23D4AF37'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.cars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:52px}
+.car{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md);transition:var(--ease);position:relative}
+.car:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.car::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--sky),var(--deep-blue))}
+.car-feat{background:var(--deep-blue)}
+.car-feat::before{background:linear-gradient(90deg,var(--gold),#f0c030)}
+.feat-tag{position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--gold);color:var(--deep-blue);padding:3px 11px;border-radius:99px}
+.car-img{height:190px;overflow:hidden}
+.car-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.car:hover .car-img img{transform:scale(1.06)}
+.car-body{padding:22px;text-align:center}
+.car-ico{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,rgba(46,196,255,.1),rgba(10,37,64,.05));border:2px solid rgba(46,196,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.car-ico i{font-size:24px;color:var(--sky)}
+.car-feat .car-ico{background:rgba(255,255,255,.08);border-color:rgba(212,175,55,.3)}
+.car-feat .car-ico i{color:var(--gold)}
+.car-body h3{font-size:19px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.car-feat .car-body h3{color:var(--white)}
+.car-sub{font-size:12px;color:var(--text-light);margin-bottom:16px}
+.car-feat .car-sub{color:rgba(255,255,255,.45)}
+.car-specs{display:flex;flex-direction:column;gap:7px;margin-bottom:18px;text-align:left}
+.car-specs li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-mid)}
+.car-feat .car-specs li{color:rgba(255,255,255,.65)}
+.car-specs li i{color:var(--sky);width:15px;flex-shrink:0}
+.car-feat .car-specs li i{color:var(--gold)}
+.car-price{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--deep-blue);margin-bottom:14px}
+.car-feat .car-price{color:var(--gold)}
+.car-price small{font-size:12px;font-weight:400;color:var(--text-light);font-family:'Poppins',sans-serif}
+.car-feat .car-price small{color:rgba(255,255,255,.4)}
+.routes-wrap{background:var(--bg-soft);border-radius:var(--r-lg);padding:36px;margin-bottom:48px}
+.routes-wrap h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--deep-blue);margin-bottom:22px;text-align:center}
+.routes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.route{background:var(--white);border-radius:var(--r-md);padding:18px;box-shadow:var(--shadow-sm);transition:var(--ease);text-align:center}
+.route:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.route i{font-size:20px;color:var(--sky);margin-bottom:8px;display:block}
+.route h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.route p{font-size:11px;color:var(--text-light)}
+.cf{background:var(--deep-blue);border-radius:var(--r-lg);padding:36px}
+.cf h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);margin-bottom:22px;text-align:center}
+.cf h3 em{font-style:italic;color:var(--gold)}
+.df{margin-bottom:13px}
+.df label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.55);margin-bottom:5px}
+.df input,.df select{width:100%;padding:10px 13px;border-radius:var(--r-sm);border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;transition:var(--ease);font-family:'Poppins',sans-serif;outline:none;-webkit-appearance:none;appearance:none}
+.df input::placeholder{color:rgba(255,255,255,.38)}
+.df select option{background:var(--deep-blue);color:var(--white)}
+.df input:focus,.df select:focus{border-color:var(--gold);background:rgba(255,255,255,.12)}
+@media(max-width:900px){.cars-grid{grid-template-columns:1fr}.car-feat{order:-1}.routes-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.routes-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="loader"><div class="ld-inner"><div class="ld-logo"><span class="ld-a">A</span><span class="ld-t">adi Tour &amp; Travel</span></div><div class="ld-bar"><div class="ld-fill"></div></div><p class="ld-sub">Preparing your ride…</p></div></div>
+<nav id="navbar" class="solid"><div class="nav-wrap">
+  <a href="index.html" class="nav-logo"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a>
+  <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html" class="active">Car Rentals</a></li><li><a href="about.html">About</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li><li><a href="book-now.html" class="nav-cta">Book Now</a></li></ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div></nav>
+<div class="page-hero"><img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1600&q=85" alt="Car Rentals" class="page-hero-bg" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600'"/><div class="page-hero-ov"></div><div class="page-hero-cnt"><div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><span>Car Rentals</span></div><div class="eyebrow gold">Fleet &amp; Rentals</div><h1>Comfortable <em>Car Rentals</em></h1><p>Explore Kashmir at your own pace with our well-maintained fleet</p></div></div>
+<section class="sec"><div class="container">
+  <div class="sec-header reveal"><div class="eyebrow">Our Fleet</div><h2 class="section-title">Choose Your <em>Vehicle</em></h2><p class="section-sub">All vehicles AC, well-maintained, with experienced local drivers</p></div>
+  <div class="cars-grid" id="carsGrid"></div>
+  <div class="routes-wrap reveal">
+    <h3>Popular Routes We Cover</h3>
+    <div class="routes-grid">
+      <div class="route reveal"><i class="fas fa-plane-arrival"></i><h4>Airport Transfers</h4><p>Srinagar Airport ↔ Hotel</p></div>
+      <div class="route reveal"><i class="fas fa-mountain"></i><h4>Srinagar – Gulmarg</h4><p>56 km · ~2 hrs</p></div>
+      <div class="route reveal"><i class="fas fa-water"></i><h4>Srinagar – Pahalgam</h4><p>95 km · ~3 hrs</p></div>
+      <div class="route reveal"><i class="fas fa-snowflake"></i><h4>Srinagar – Sonmarg</h4><p>80 km · ~2.5 hrs</p></div>
+      <div class="route reveal"><i class="fas fa-road"></i><h4>Srinagar – Jammu</h4><p>290 km · ~6 hrs</p></div>
+      <div class="route reveal"><i class="fas fa-tree"></i><h4>Yusmarg Day Trip</h4><p>47 km · ~1.5 hrs</p></div>
+      <div class="route reveal"><i class="fas fa-dharmachakra"></i><h4>Vaishno Devi</h4><p>Katra transfer</p></div>
+      <div class="route reveal"><i class="fas fa-map-marked-alt"></i><h4>Custom Route</h4><p>Tell us your plan</p></div>
+    </div>
+  </div>
+  <div class="cf reveal">
+    <h3>Book a <em>Vehicle</em></h3>
+    <form id="carForm" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+        <div class="df"><label>Full Name *</label><input type="text" id="cName" name="name" placeholder="Your name" required/></div>
+        <div class="df"><label>Phone *</label><input type="tel" id="cPhone" name="phone" placeholder="+91 XXXXX XXXXX" required/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+        <div class="df"><label>Pickup Date</label><input type="date" name="date"/></div>
+        <div class="df"><label>Pickup Location</label><input type="text" name="pickup" placeholder="Airport / Hotel / Address"/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+        <div class="df"><label>Vehicle Type</label>
+          <select name="vehicle"><option value="">Select vehicle</option><option>Sedan (Swift Dzire / Etios)</option><option>SUV / Innova Crysta</option><option>Ertiga (7-seater)</option><option>Tempo Traveller (10-14 seater)</option><option>Mini Bus (20+ seater)</option></select>
+        </div>
+        <div class="df"><label>Trip Type</label>
+          <select name="tripType"><option value="">Select type</option><option>Airport Transfer</option><option>Day Sightseeing</option><option>Multi-day Tour</option><option>Outstation</option></select>
+        </div>
+      </div>
+      <div class="df"><label>Route / Destination</label><input type="text" name="route" placeholder="e.g. Srinagar to Gulmarg and back"/></div>
+      <p id="cErr" style="color:#ffb3b3;font-size:12px;display:none;margin-bottom:8px">Please enter your name and phone number.</p>
+      <button type="submit" class="btn-primary" id="carSubmitBtn" style="width:100%;justify-content:center;margin-top:4px"><i class="fas fa-paper-plane"></i> Request Booking</button>
+    </form>
+    <div id="carSuccess" style="display:none;text-align:center;padding:30px 0">
+      <i class="fas fa-check-circle" style="font-size:48px;color:#25D366;display:block;margin-bottom:12px"></i>
+      <h3 style="color:var(--white);font-size:20px;margin-bottom:8px">Booking Request Sent!</h3>
+      <p style="color:rgba(255,255,255,.6);margin-bottom:18px">We'll call you within 30 minutes to confirm your vehicle.</p>
+      <a href="https://wa.me/919596368558" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+    </div>
+  </div>
+</div></section>
+<footer class="footer"><div class="footer-top"><div class="container"><div class="footer-grid"><div class="f-brand"><a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:6px"><span class="logo-a">A</span><span class="logo-t">adi Tour &amp; Travel</span></a><p>Your trusted partner for unforgettable Kashmir journeys.</p><a href="https://makemetop.in/?biz=41fdfe7OZyc2dCK8COnq" target="_blank" class="verified-link"><i class="fas fa-certificate"></i> Verified on MakeMeTop</a><div class="f-socials"><a href="https://www.facebook.com/profile.php?id=61578478771649" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/aadi_travel_world" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://youtube.com/@aaditourandtravel" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://wa.me/919596368558" target="_blank"><i class="fab fa-whatsapp"></i></a></div></div><div class="f-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="f-col"><h4>Services</h4><ul><li><a href="tours.html">Kashmir Tours</a></li><li><a href="tours.html">Honeymoon</a></li><li><a href="car-rentals.html">Car Rentals</a></li><li><a href="book-now.html">Book Now</a></li></ul></div><div class="f-col"><h4>Contact</h4><div class="f-contact-item"><i class="fas fa-phone-alt"></i><a href="tel:+919596368558">+91 9596368558</a></div><div class="f-contact-item"><i class="fas fa-envelope"></i><a href="mailto:aaditourandtravel121@gmail.com">aaditourandtravel121@gmail.com</a></div><div class="f-contact-item"><i class="fas fa-map-marker-alt"></i><span>Pampore, J&amp;K – 192122</span></div></div></div></div></div><div class="footer-bottom"><div class="container"><p>© 2025 Aadi Tour &amp; Travel. All rights reserved.</p><p>Powered by <a href="https://makemetop.in" target="_blank">MakeMeTop</a></p></div></div></footer>
+<a href="https://wa.me/919596368558" target="_blank" class="wa-float"><i class="fab fa-whatsapp"></i><span class="wa-tip">Chat with us!</span></a>
+<button class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore,collection,getDocs,addDoc,query,orderBy,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const fbCfg={  apiKey: "AIzaSyADiBZe0V5gTnB89Ik1Bby2NDo-9nRxAHc",
+  authDomain: "insta-web-upload.firebaseapp.com",
+  databaseURL: "https://insta-web-upload-default-rtdb.firebaseio.com",
+  projectId: "insta-web-upload",
+  storageBucket: "insta-web-upload.firebasestorage.app",
+  messagingSenderId: "1092302887537",
+  appId: "1:1092302887537:web:a1bb7595868c84c30999d0"};
+const DEFAULT_CARS=[
+  {name:'Sedan',sub:'Swift Dzire / Etios / Honda City',image:'https://images.unsplash.com/photo-1550355291-bbee04a92027?w=700&q=80',icon:'fas fa-car-side',specs:['4 Passengers','2 Luggage Bags','AC + Music System','Local Driver'],price:'₹2,500',priceNote:'/day',featured:false},
+  {name:'SUV / Innova',sub:'Toyota Innova Crysta / Ertiga',image:'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=700&q=80',icon:'fas fa-shuttle-van',specs:['6–7 Passengers','4 Luggage Bags','AC + Heater','Push-back Seats'],price:'₹3,800',priceNote:'/day',featured:true},
+  {name:'Tempo Traveller',sub:'Groups of 10 to 14',image:'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=700&q=80',icon:'fas fa-bus',specs:['10–14 Passengers','Large Luggage Space','AC + Push-back Seats','GPS Tracked'],price:'₹5,500',priceNote:'/day',featured:false},
+];
+let cars=[...DEFAULT_CARS];
+let db=null;
+try{const app=initializeApp(fbCfg);db=getFirestore(app);const s=await getDocs(query(collection(db,'vehicles'),orderBy('order','asc')));if(!s.empty){cars=[];s.forEach(d=>cars.push(d.data()));}}catch(e){}
+const grid=document.getElementById('carsGrid');
+cars.forEach(c=>{
+  const el=document.createElement('div');el.className='car reveal'+(c.featured?' car-feat':'');
+  el.innerHTML=`${c.featured?'<div class="feat-tag">Most Popular</div>':''}
+  <div class="car-img"><img src="${c.image}" alt="${c.name}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700'"/></div>
+  <div class="car-body">
+    <div class="car-ico"><i class="${c.icon||'fas fa-car'}"></i></div>
+    <h3>${c.name}</h3><p class="car-sub">${c.sub||''}</p>
+    <ul class="car-specs">${(c.specs||[]).map(s=>`<li><i class="fas fa-check"></i>${s}</li>`).join('')}</ul>
+    <div class="car-price">${c.price}<small>${c.priceNote||''}</small></div>
+    <a href="book-now.html?vehicle=${encodeURIComponent(c.name)}" class="${c.featured?'btn-primary':'btn-dark'}" style="display:flex;width:100%;justify-content:center"><i class="fas fa-paper-plane" style="margin-right:6px"></i>Book Now</a>
+  </div>`;
+  grid.appendChild(el);
+});
+// Re-run reveal for dynamically added cards
+const ro2=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro2.unobserve(e.target);}});}   ,{threshold:0.08});
+grid.querySelectorAll('.reveal').forEach(el=>ro2.observe(el));
+
+document.getElementById('carForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const nm=document.getElementById('cName').value.trim();
+  const ph=document.getElementById('cPhone').value.trim();
+  if(!nm||!ph){document.getElementById('cErr').style.display='block';return;}
+  document.getElementById('cErr').style.display='none';
+  const btn=document.getElementById('carSubmitBtn');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending…';
+  const data=Object.fromEntries(new FormData(e.target));
+  data.createdAt=serverTimestamp();data.status='pending';data.source='car_rentals';
+  try{if(db)await addDoc(collection(db,'car_bookings'),data);}catch(err){console.error(err);}
+  document.getElementById('carForm').style.display='none';
+  document.getElementById('carSuccess').style.display='block';
+});
+</script>
+<script>
+(function(){window.addEventListener('load',function(){setTimeout(function(){var l=document.getElementById('loader');if(l)l.classList.add('hidden');},1200);});var nb=document.getElementById('navbar');window.addEventListener('scroll',function(){if(nb)nb.classList.toggle('scrolled',window.scrollY>60);var st=document.getElementById('scrollTop');if(st)st.classList.toggle('show',window.scrollY>400);},{passive:true});var hbg=document.getElementById('hamburger'),nls=document.getElementById('navLinks');if(hbg&&nls){hbg.addEventListener('click',function(e){e.stopPropagation();var o=hbg.classList.toggle('open');nls.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';});nls.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';});});document.addEventListener('click',function(e){if(nls.classList.contains('open')&&!nls.contains(e.target)&&!hbg.contains(e.target)){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){hbg.classList.remove('open');nls.classList.remove('open');document.body.style.overflow='';}});}var stb=document.getElementById('scrollTop');if(stb)stb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:0.08});document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});})();
+</script>
+</body></html>
