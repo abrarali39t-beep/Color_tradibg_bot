@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://aaditourandtravel.com/</loc>
+    <lastmod>2026-04-12</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://aaditourandtravel.com/tours.html</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://aaditourandtravel.com/car-rentals.html</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://aaditourandtravel.com/about.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://aaditourandtravel.com/gallery.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://aaditourandtravel.com/contact.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://aaditourandtravel.com/book-now.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+</urlset>
